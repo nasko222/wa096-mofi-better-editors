@@ -13,7 +13,7 @@
 
 Include "particles-define.bb"
 
-Global VersionText$="MOFI Editor V1.01 BETA"
+Global VersionText$="WA MOFI Editor (BetterEditor Mod v1.02)"
 
 Global MASTERUSER=True
 
@@ -26,7 +26,7 @@ Global EditorMode=0		;0-level, 1-textures, 2-sidetextures, 3-objects
 						;8-master edit screen
 						;9-dialog edit screen
 						
-AppTitle "Wonderland Adventures Editor"
+AppTitle "WA MOFI Editor"
 ; EDITOR DIALOG DATA
 
 Global CurrentDialog
@@ -549,9 +549,9 @@ PositionEntity CurrentObjectMarkerMesh,0,300,0
 
 ; Load Textures
 ; =================
-LevelTexture=MyLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+LevelTexture=MyLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 EntityTexture TexturePlane,LevelTexture
-WaterTexture=MyLoadTexture("data\Leveltextures\"+WaterTExturename$(currentwatertexture),2)
+WaterTexture=MyLoadTexture("data\LevelTextures\"+WaterTExturename$(currentwatertexture),2)
 Global ButtonTexture=MyLoadTexture("data\graphics\buttons1.bmp",4)
 Global GateTexture=MyLoadTexture("data\graphics\gates.bmp",1)
 
@@ -608,9 +608,9 @@ HideEntity SteppingStoneMesh
 
 ; WaterFall
 Dim WaterFallTexture(2)
-WaterFallTexture(0)=MyLoadTexture("data\Leveltextures\waterfall.jpg",1)
-WaterFallTexture(1)=MyLoadTexture("data\Leveltextures\waterfalllava.jpg",1)
-WaterFallTexture(2)=MyLoadTexture("data\Leveltextures\waterfallgreen.jpg",1)
+WaterFallTexture(0)=MyLoadTexture("data\LevelTextures\waterfall.jpg",1)
+WaterFallTexture(1)=MyLoadTexture("data\LevelTextures\waterfalllava.jpg",1)
+WaterFallTexture(2)=MyLoadTexture("data\LevelTextures\waterfallgreen.jpg",1)
 Global WaterFallMesh;
 
 ; Star
@@ -2040,7 +2040,7 @@ Function EditorControls()
 			CurrentLevelTexture=CurrentLevelTexture+1
 			If CurrentLevelTexture=NofLevelTextures Then currentleveltexture=0
 			FreeTexture LevelTexture
-			LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+			LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 			EntityTexture TexturePlane,LevelTexture
 			For j=0 To LevelHeight-1
 				EntityTexture LevelMesh(j),LevelTexture
@@ -2052,7 +2052,7 @@ Function EditorControls()
 			CurrentLevelTexture=CurrentLevelTexture-1
 			If CurrentLevelTexture=-1 Then currentleveltexture=NofLevelTextures-1
 			FreeTexture LevelTexture
-			LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+			LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 			EntityTexture TexturePlane,LevelTexture
 			For j=0 To LevelHeight-1
 				EntityTexture LevelMesh(j),LevelTexture
@@ -2066,7 +2066,7 @@ Function EditorControls()
 			
 			If CurrentWaterTexture=NofWaterTextures Then currentWatertexture=0
 			FreeTexture WaterTexture
-			waterTexture=myLoadTexture("data\Leveltextures\"+waterTexturename$(CurrentWaterTexture),2)
+			waterTexture=myLoadTexture("data\LevelTextures\"+waterTexturename$(CurrentWaterTexture),2)
 			EntityTexture Currentwatertile,WaterTexture
 			For j=0 To LevelHeight-1
 				EntityTexture WaterMesh(j),WaterTexture
@@ -2080,7 +2080,7 @@ Function EditorControls()
 			
 			If CurrentWaterTexture=-1 Then currentWatertexture=NofWaterTextures-1
 			FreeTexture WaterTexture
-			waterTexture=myLoadTexture("data\Leveltextures\"+waterTexturename$(CurrentWaterTexture),2)
+			waterTexture=myLoadTexture("data\LevelTextures\"+waterTexturename$(CurrentWaterTexture),2)
 			EntityTexture Currentwatertile,WaterTexture
 			For j=0 To LevelHeight-1
 				EntityTexture WaterMesh(j),WaterTexture
@@ -2098,7 +2098,7 @@ Function EditorControls()
 			Color 255,255,255
 			LevelTextureCustomName$=Input$( "Custom Texture Name (e.g. 'customtemplate'):")
 			
-			If FileType (globaldirname$+"\Custom Content\Textures\leveltex "+leveltexturecustomname$+".bmp")<>1 And FileType (globaldirname$+"\custom content\textures\backgroundtex "+leveltexturecustomname$+"1.bmp")<>1 And FileType (globaldirname$+"\custom content\textures\backgroundtex "+leveltexturecustomname$+"2.bmp")<>1
+			If FileType (globaldirname$+"\Custom Content\Textures\leveltex "+leveltexturecustomname$+".bmp")<>1 And FileType (globaldirname$+"\Custom Content\Textures\backgroundtex "+leveltexturecustomname$+"1.bmp")<>1 And FileType (globaldirname$+"\Custom Content\Textures\backgroundtex "+leveltexturecustomname$+"2.bmp")<>1
 				Locate 0,0
 				Color 0,0,0
 				Rect 0,0,500,40,True
@@ -2116,7 +2116,7 @@ Function EditorControls()
 					Rect 0,0,500,40,True
 					Color 255,255,0
 					Print "TEXTURE COULDN'T LOAD!"
-					LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+					LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 					
 
 					Delay 2000
@@ -2158,7 +2158,7 @@ Function EditorControls()
 					Rect 0,0,500,40,True
 					Color 255,255,0
 					Print "TEXTURE COULDN'T LOAD!"
-					WaterTexture=myLoadTexture("data\Leveltextures\"+WaterTexturename$(CurrentWaterTexture),2)
+					WaterTexture=myLoadTexture("data\LevelTextures\"+WaterTexturename$(CurrentWaterTexture),2)
 					
 
 					Delay 2000
@@ -5901,20 +5901,6 @@ Function AdjustObjectAdjuster(i)
 					CurrentObjectActivationType=1
 				EndIf
 			EndIf
-		Else If CurrentObjectModelName$="!Autodoor"
-			If LeftMouse=True Or RightMouse=True
-				If CurrentObjectActivationType=11 
-					CurrentObjectActivationType=17
-				Else If CurrentObjectActivationType=17
-					CurrentObjectActivationType=18
-				Else If CurrentObjectActivationType=18
-					CurrentObjectActivationType=19
-				Else If CurrentObjectActivationType=19
-					CurrentObjectActivationType=20
-				Else
-					CurrentObjectActivationType=11
-				EndIf
-			EndIf
 		Else
 			If LeftMouse=True Then CurrentObjectActivationType=CurrentObjectActivationType+Adj
 			If RightMouse=True  Then CurrentObjectActivationType=CurrentObjectActivationType-Adj
@@ -5970,15 +5956,11 @@ Function AdjustObjectAdjuster(i)
 
 	
 
-		Else If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)<10 Or (CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Pushbot" Or CurrentObjectModelName$="!Autodoor" Or CurrentObjectModelName$="!Suctube" Or CurrentObjectModelName$="!Conveyor"
+		Else If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)<10 Or (CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!ColourGate"
 
 			; colours 0-15
 			If CurrentObjectData(0)>15 CurrentObjectData(0)=0
 			If CurrentObjectData(0)<0 CurrentObjectData(0)=15
-		Else If CurrentObjectModelName$="!KeyCard"
-			; colours 0-7
-			If CurrentObjectData(0)>7 CurrentObjectData(0)=0
-			If CurrentObjectData(0)<0 CurrentObjectData(0)=7
 
 		Else If CurrentObjectModelName$="!Teleport" 
 			; colours 0-8
@@ -7074,9 +7056,9 @@ Function BuildCurrentObjectModel()
 		CurrentObjectModel=CopyEntity(StinkerMesh)
 		
 		If CurrentObjectData(0)=5
-			CurrentObjectTexture=MyLoadTexture("Data\leveltextures\waterfall.jpg",1)
+			CurrentObjectTexture=MyLoadTexture("data\LevelTextures\waterfall.jpg",1)
 		Else If CurrentObjectData(0)=6
-			CurrentObjectTexture=MyLoadTexture("Data\leveltextures\waterfalllava.jpg",1)
+			CurrentObjectTexture=MyLoadTexture("data\LevelTextures\waterfalllava.jpg",1)
 
 		Else
 			CurrentObjectTexture=MyLoadTexture("data/models/stinker/body00"+Str$(CurrentObjectData(0))+Chr$(65+CurrentObjectData(1))+".jpg",1)
@@ -8189,7 +8171,7 @@ Function LoadLevel(levelnumber)
 	FreeTexture watertexture
 	leveltexture=0
 	If currentleveltexture=-1
-		LevelTexture=myLoadTexture(globaldirname$+"\custom content\leveltextures\leveltex "+LevelTextureCustomName$+".bmp",1)
+		LevelTexture=myLoadTexture(globaldirname$+"\Custom Content\Textures\leveltex "+LevelTextureCustomName$+".bmp",1)
 		If leveltexture=0
 			Locate 0,0
 			Color 0,0,0
@@ -8198,16 +8180,16 @@ Function LoadLevel(levelnumber)
 			Print "CUSTOM TEXTURE NOT FOUND... REVERTING."
 			Delay 2000
 			currentleveltexture=1
-			LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+			LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 		EndIf
 	Else
-		LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+		LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 		
 	EndIf
 	
 	watertexture=0
 	If currentwatertexture=-1
-		WaterTexture=myLoadTexture(globaldirname$+"\custom content\textures\watertex "+WaterTextureCustomName$+".jpg",2)
+		WaterTexture=myLoadTexture(globaldirname$+"\Custom Content\Textures\watertex "+WaterTextureCustomName$+".jpg",2)
 		If Watertexture=0
 			Locate 0,0
 			Color 0,0,0
@@ -8216,10 +8198,10 @@ Function LoadLevel(levelnumber)
 			Print "CUSTOM WATERTEXTURE NOT FOUND... REVERTING."
 			Delay 2000
 			currentwatertexture=0
-			WaterTexture=myLoadTexture("data\Leveltextures\"+WaterTexturename$(CurrentWaterTexture),2)
+			WaterTexture=myLoadTexture("data\LevelTextures\"+WaterTexturename$(CurrentWaterTexture),2)
 		EndIf
 	Else
-		waterTexture=myLoadTexture("data\Leveltextures\"+waterTexturename$(CurrentWaterTexture),2)
+		waterTexture=myLoadTexture("data\LevelTextures\"+waterTexturename$(CurrentWaterTexture),2)
 	EndIf
 	
 	EntityTexture TexturePlane,LevelTexture
@@ -8376,9 +8358,9 @@ Function LoadLevel(levelnumber)
 			
 		
 			If ObjectData(Dest,0)=5
-				ObjectTexture(Dest)=MyLoadTexture("Data\leveltextures\waterfall.jpg",1)
+				ObjectTexture(Dest)=MyLoadTexture("data\LevelTextures\waterfall.jpg",1)
 			Else If ObjectData(Dest,0)=6
-				ObjectTexture(Dest)=MyLoadTexture("Data\leveltextures\waterfalllava.jpg",1)
+				ObjectTexture(Dest)=MyLoadTexture("data\LevelTextures\waterfalllava.jpg",1)
 	
 			Else
 				ObjectTexture(Dest)=MyLoadTexture("data/models/stinker/body00"+Str$(ObjectData(Dest,0))+Chr$(65+ObjectData(Dest,1))+".jpg",1)
@@ -8555,15 +8537,7 @@ Function LoadLevel(levelnumber)
 			ObjectEntity(Dest)=MyLoadMesh("data\models\bridges\cylinder1.b3d",0)
 			RotateMesh ObjectEntity(Dest),90,0,0
 			EntityTexture ObjectEntity(Dest),Springtexture
-		
-		Else If ObjectModelName$(Dest)="!Suctube"
-			ObjectEntity(Dest)=CreateSucTubeMesh(ObjectData(Dest,3),ObjectData(Dest,0),True)
-		Else If ObjectModelName$(Dest)="!SuctubeX"
-			ObjectEntity(Dest)=CreateSucTubeXMesh(ObjectData(Dest,3))
-
-
-
-
+			
 		Else If ObjectModelName$(Dest)="!FlipBridge"
 			ObjectEntity(Dest)=CreateCube()
 			ScaleMesh ObjectEntity(Dest),.35,.1,.5
@@ -8649,9 +8623,6 @@ Function LoadLevel(levelnumber)
 
 		Else If ObjectModelName$(Dest)="!ColourGate"
 			ObjectEntity(Dest)=CreateColourGateMesh(ObjectData(Dest,2),ObjectData(Dest,0))
-			
-		Else If ObjectModelName$(Dest)="!Autodoor"
-			ObjectEntity(Dest)=CopyEntity(Autodoormesh)
 		Else If ObjectModelName$(Dest)="!Transporter"
 			ObjectEntity(Dest)=CreateTransporterMesh(ObjectData(Dest,0),3)
 			RotateMesh ObjectEntity(Dest),0,90*ObjectData(Dest,2),0
@@ -8667,8 +8638,6 @@ Function LoadLevel(levelnumber)
 
 		Else If ObjectModelName$(Dest)="!Key"
 			ObjectEntity(Dest)=CreateKeyMesh(ObjectData(Dest,0))
-		Else If ObjectModelName$(Dest)="!KeyCard"
-			ObjectEntity(Dest)=CreateKeyCardMesh(ObjectData(Dest,0))
 
 
 		Else If ObjectModelName$(Dest)="!SteppingStone"
@@ -9371,44 +9340,6 @@ Function CreateKeyMesh(col)
 	Return Entity
 End Function
 
-Function CreateKeyCardMesh(col)
-
-	tex=24+col
-
-	entity=CreateMesh()
-
-
-	surface=CreateSurface(entity)
-	
-	AddVertex (surface,-.4,.4,-.1,(tex Mod 8)*0.125+0.000,Floor((tex Mod 64)/8)*0.125+0.000)
-	AddVertex (surface,.4,.4,-.10,(tex Mod 8)*0.125+0.125,Floor((tex Mod 64)/8)*0.125+0.000)
-	AddVertex (surface,-.4,-.4,-.10,(tex Mod 8)*0.125+0.000,Floor((tex Mod 64)/8)*0.125+0.125)
-	AddVertex (surface,.4,-.4,0-.1,(tex Mod 8)*0.125+0.125,Floor((tex Mod 64)/8)*0.125+0.125)
-	
-	AddVertex (surface,-.4,.4,.10,(tex Mod 8)*0.125+0.000,Floor((tex Mod 64)/8)*0.125+0.000)
-	AddVertex (surface,.4,.4,.10,(tex Mod 8)*0.125+0.125,Floor((tex Mod 64)/8)*0.125+0.000)
-	AddVertex (surface,-.4,-.4,.10,(tex Mod 8)*0.125+0.000,Floor((tex Mod 64)/8)*0.125+0.125)
-	AddVertex (surface,.4,-.4,.10,(tex Mod 8)*0.125+0.125,Floor((tex Mod 64)/8)*0.125+0.125)
-
-
-
-	AddTriangle(surface,0,1,2)
-	AddTriangle(surface,1,3,2)
-	
-	AddTriangle(surface,5,4,6)
-	AddTriangle(surface,5,6,7)
-	
-	RotateMesh Entity,90,0,0
-	PositionMesh Entity,0,.3,0
-
-	
-	
-	
-	UpdateNormals Entity
-	EntityTexture Entity,ButtonTexture
-	Return Entity
-End Function
-
 
 Function CreateCustomItemMesh(tex)
 	entity=CreateMesh()
@@ -9486,209 +9417,9 @@ Function CreateCustomItemMesh(tex)
 
 End Function
 
-Function CreatePushbotMesh(tex,dir)
-	
-	Entity=CreateMesh()
-	Surface=CreateSurface(Entity)
-	
-	If dir=2 ;(180 turn around)
-		dir=0
-		;front
-		AddVertex (surface,-.4,0,.4,0,.25+.25*dir)
-		AddVertex (surface,+.4,0,.4,0,0+.25*dir)
-		AddVertex (surface,-.2,.3,.2,.25,.20+.25*dir)
-		AddVertex (surface,+.2,.3,.2,.25,.05+.25*dir)
-		AddTriangle (surface,0,1,2)
-		AddTriangle (surface,1,3,2)
-		; Top
-		AddVertex (surface,-.4,.4,-.4,.5,.20+.25*dir)
-		AddVertex (surface,+.4,.4,-.4,.5,.05+.25*dir)
-		AddTriangle (surface,2,3,4)
-		AddTriangle (surface,3,5,4)
-		;Back
-		AddVertex (surface,-.45,0,-.45,.75,.25+.25*dir)
-		AddVertex (surface,+.45,0,-.45,.75,0+.25*dir)
-		AddTriangle (surface,4,5,6)
-		AddTriangle (surface,5,7,6)
-		; Left
-		AddVertex (surface,-.4,0,.4,.75,.25+.25*dir)
-		AddVertex (surface,-.45,0,-.45,.75,0+.25*dir)
-		AddVertex (surface,-.2,.3,.2,1,.25+.25*dir)
-		AddVertex (surface,-.4,.4,-.4,1,0+.25*dir)
-		AddTriangle (surface,10,9,8)
-		AddTriangle (surface,10,11,9)
-		; Right
-		AddVertex (surface,.4,0,.4,.75,.25+.25*dir)
-		AddVertex (surface,.45,0,-.45,.75,0+.25*dir)
-		AddVertex (surface,.2,.3,.2,1,.25+.25*dir)
-		AddVertex (surface,.4,.4,-.4,1,0+.25*dir)
-		AddTriangle (surface,12,13,14)
-		AddTriangle (surface,13,15,14)
-
-	
-	Else
-		dir=1-dir
-		; Front
-		AddVertex (surface,-.4,0,.4,0,.25+.25*dir)
-		AddVertex (surface,+.4,0,.4,0,0+.25*dir)
-		AddVertex (surface,-.2,.3,.2,.25,.25+.25*dir)
-		AddVertex (surface,+.2,.3,.2,.25,0+.25*dir)
-		AddTriangle (surface,0,1,2)
-		AddTriangle (surface,1,3,2)
-		; Top
-		AddVertex (surface,-.4,.4,-.4,.5,.25+.25*dir)
-		AddVertex (surface,+.4,.4,-.4,.5,0+.25*dir)
-		AddTriangle (surface,2,3,4)
-		AddTriangle (surface,3,5,4)
-		;Back
-		AddVertex (surface,-.45,0,-.45,.75,.25+.25*dir)
-		AddVertex (surface,+.45,0,-.45,.75,0+.25*dir)
-		AddTriangle (surface,4,5,6)
-		AddTriangle (surface,5,7,6)
-		; Left
-		AddVertex (surface,-.4,0,.4,.75,.25+.25*dir)
-		AddVertex (surface,-.45,0,-.45,.75,0+.25*dir)
-		AddVertex (surface,-.2,.3,.2,1,.25+.25*dir)
-		AddVertex (surface,-.4,.4,-.4,1,0+.25*dir)
-		AddTriangle (surface,10,9,8)
-		AddTriangle (surface,10,11,9)
-		; Right
-		AddVertex (surface,.4,0,.4,.75,.25+.25*dir)
-		AddVertex (surface,.45,0,-.45,.75,0+.25*dir)
-		AddVertex (surface,.2,.3,.2,1,.25+.25*dir)
-		AddVertex (surface,.4,.4,-.4,1,0+.25*dir)
-		AddTriangle (surface,12,13,14)
-		AddTriangle (surface,13,15,14)
-	EndIf
-
-	
-	
-	; Col
-	AddVertex (surface,-.05,.33,.05,(tex Mod 8)*0.125+.01,(tex/8)*0.125+.51)
-	AddVertex (surface,.05,.33,.05,(tex Mod 8)*0.125+.115,(tex/8)*0.125+.51)
-	AddVertex (surface,-.25,.39,-.35,(tex Mod 8)*0.125+.01,(tex/8)*0.125+.51+.115)
-	AddVertex (surface,.25,.39,-.35,(tex Mod 8)*0.125+.115,(tex/8)*0.125+.51+.115)
-	AddTriangle (surface,16,17,18)
-	AddTriangle (surface,17,19,18)
-	
-		
-	
-	UpdateNormals Entity
-	
-	EntityTexture Entity,PushbotTexture
-	Return Entity
-
-End Function
-
-Function CreateSuctubeMesh(tex,col,active)
-	
-	Entity=CreateMesh()
-	Surface=CreateSurface(Entity)
-	
-	nofsegments#=16
-	
-	i=0
-	angle#=-(360.0/nofsegments)/2.0+i*(360.0/nofsegments)
-	; top triangle
-	AddVertex (surface,-0.3,1.71,-0.3,(col Mod 8)*0.125+.01,(col/8)*0.125+.51)
-	AddVertex (surface,+0.3,1.71,-0.3,(col Mod 8)*0.125+.115,(col/8)*0.125+.51)
-	AddVertex (surface,0,1.71,+0.3,(col Mod 8)*0.125+.01,(col/8)*0.125+.51+.115)
-	AddTriangle (surface,0,1,2)
-	AddTriangle (surface,0,2,1)
-
-	
-	For i=0 To nofsegments-1
-		angle#=-(360.0/nofsegments)/2.0+i*(360.0/nofsegments)
-		AddVertex (surface,1.5*Sin(angle),0.7+1.0*Cos(angle),-0.505,0.25*tex,107.0/512.0)
-		AddVertex (surface,1.5*Sin(angle),0.7+1.0*Cos(angle),+0.505,0.25*tex,88.0/512.0)
-		AddVertex (surface,1.5*Sin(angle+(360.0/nofsegments)),0.7+1.0*Cos(angle+(360.0/nofsegments)),-0.505,0.25*tex+0.25,107.0/512.0)
-		AddVertex (surface,1.5*Sin(angle+(360.0/nofsegments)),0.7+1.0*Cos(angle+(360.0/nofsegments)),+0.505,0.25*tex+0.25,88.0/512.0)
-
-		;i=i+1 ; to account for the first four vertices
-		AddTriangle(surface,i*4+0+3,i*4+1+3,i*4+2+3)
-		AddTriangle(surface,i*4+1+3,i*4+3+3,i*4+2+3)
-		
-		AddTriangle(surface,i*4+2+3,i*4+1+3,i*4+0+3)
-		AddTriangle(surface,i*4+2+3,i*4+3+3,i*4+1+3)
-		;i=i-1
-	Next
-	
-
-	
-
-	UpdateNormals Entity
-	
-	EntityTexture Entity,GateTexture
-	Return Entity
-End Function
-
-Function CreateSuctubeXMesh(tex)
-	
-	Entity=CreateMesh()
-	Surface=CreateSurface(Entity)
-	
-	nofsegments#=16
-	nofarcpoints#=8
-	
-		
-
-	For j=0 To nofarcpoints
-		angle2#=(90.0/nofarcpoints)*j
-		For i=0 To nofsegments-1
-			angle#=-(360.0/nofsegments)/2.0+i*(360.0/nofsegments)
-			height#=0.7+1.0*Cos(angle)
-			radius#=1.5-1.5*Sin(angle)
-			
-			
-			If i Mod 2 =0
-				xtex#=0.25
-			Else
-				xtex#=0.0
-			EndIf
-
-			If j Mod 2 =0
-				ytex#=19.0
-			Else
-				ytex#=0.0
-			EndIf
-			
-			AddVertex (surface,1.5-radius*Cos(angle2),height,-1.5+radius*Sin(angle2),0.25*tex+xtex,(107.0-ytex)/512.0)
-			
-		Next
-	Next
-	
-	For j=0 To nofarcpoints-1
-		For i=0 To nofsegments-1
-		
-			AddTriangle(surface,j*nofsegments+i,j*nofsegments+((i+1) Mod nofsegments),(j+1)*nofsegments+i)
-			AddTriangle(surface,(j+1)*nofsegments+i,j*nofsegments+((i+1) Mod nofsegments),(j+1)*nofsegments+((i+1) Mod nofsegments))
-			
-			AddTriangle(surface,j*nofsegments+((i+1) Mod nofsegments),j*nofsegments+i,(j+1)*nofsegments+i)
-			AddTriangle(surface,(j+1)*nofsegments+((i+1) Mod nofsegments),j*nofsegments+((i+1) Mod nofsegments),(j+1)*nofsegments+i)
-
-
-			
-		Next
-	Next
-	
-
-	
-
-	UpdateNormals Entity
-	
-	EntityTexture Entity,GateTexture
-	Return Entity
-End Function
-
-
-
-
-
-
-
 Function GetTextureNames()
 
-	dir=ReadDir("data\leveltextures")
+	dir=ReadDir("data\LevelTextures")
 	
 	NofLevelTextures=0
 	NofWaterTextures=0
@@ -10657,13 +10388,13 @@ Function StartMaster()
 	If FileType(globaldirname$+"\Adventures\editing\"+ex$+AdventureFileName$+"\master.dat")=1
 		LoadMasterFile()
 		If customiconname$="Standard"
-			IconTextureCustom=myLoadTexture("data\Graphics\icons-custom.bmp",4)
+			IconTextureCustom=myLoadTexture("data\graphics\icons-custom.bmp",4)
 		Else
 			IconTextureCustom=myLoadTexture(globaldirname$+"\Custom Content\Icons\icons "+customiconname$+".bmp",4)
 		EndIf
 	Else
 		CustomIconName$="Standard"
-		IconTextureCustom=myLoadTexture("data\Graphics\icons-custom.bmp",4)
+		IconTextureCustom=myLoadTexture("data\graphics\icons-custom.bmp",4)
 		AdventureStartX=1
 		AdventureStartY=1 ; x/y position of player start
 		AdventureStartDir=0
@@ -11244,7 +10975,7 @@ Function MasterMainLoop()
 			If CustomIconName$="" Or CustomIconName$="Standard"
 				CustomIconName$="Standard"
 			Else
-				If FileType(globaldirname$+"\Custom Content\icons\icons "+CustomIconName$+".bmp")<>1
+				If FileType(globaldirname$+"\Custom Content\Icons\icons "+CustomIconName$+".bmp")<>1
 					Locate 0,0
 					Color 0,0,0
 					Rect 0,0,500,60,True
@@ -11316,9 +11047,9 @@ Function MasterMainLoop()
 					FreeTexture leveltexture
 					FreeTexture watertexture
 					CurrentLevelTexture=0
-					LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+					LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 					CurrentWaterTexture=0	
-					waterTexture=myLoadTexture("data\Leveltextures\"+waterTexturename$(CurrentWaterTexture),2)
+					waterTexture=myLoadTexture("data\LevelTextures\"+waterTexturename$(CurrentWaterTexture),2)
 					EntityTexture TexturePlane,LevelTexture
 					EntityTexture CurrentWaterTile,WaterTexture
 			
@@ -11435,7 +11166,7 @@ Function LoadMasterFile()
 	If CustomIconName$="" Or CustomIconName$="Standard"
 		CustomIconName$="Standard"
 	Else
-		If FileType(globaldirname$+"\custom content\icons\icons "+CustomIconName$+".bmp")<>1
+		If FileType(globaldirname$+"\Custom Content\Icons\icons "+CustomIconName$+".bmp")<>1
 			Cls
 			Print "Error: Custom Icon File '"+customiconname$+"' not found."
 			Print "Reverting to 'Standard' Custom Icon Texture."
