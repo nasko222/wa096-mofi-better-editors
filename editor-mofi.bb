@@ -13,7 +13,7 @@
 
 Include "particles-define.bb"
 
-Global VersionText$="MOFI Editor V1.01"
+Global VersionText$="MOFI Editor V1.01 BETA"
 
 Global MASTERUSER=True
 
@@ -109,7 +109,7 @@ Dim AdventureWonCommand(3,6)	; 3 commands, each with level/command/fourdata
 						
 
 
-Dim winningcondition$(20)
+Dim winningcondition$(19)
 Global nofwinningconditions
 Restore winning
 Repeat
@@ -437,12 +437,7 @@ Global AmbientBlue=100
 
 ; Setup Graphics, Lights, Camera
 ; ================================
-If displayfullscreen=True
-	Graphics3D 800,600,16,1
-Else
-	Graphics3D 800,600,16,2
-
-EndIf
+	Graphics3D 800,600,32,2
 SetBuffer BackBuffer()
 
 AmbientLight 155,155,155
@@ -1239,6 +1234,12 @@ Function EditorMainLoop()
 	Text 100,550,"   FLIP Y"
 	Text 100+4,580,"  FLIP XY"
 	
+	Text 478,520,"   LOAD TILE"
+    Text 478,545,"   SAVE TILE"
+
+    Text 578,520,"   LOAD OBJECT"
+    Text 578,545,"   SAVE OBJECT"
+	
 
 	If ShowLogicMesh=True
 		Text 300,520,"    SHOW"
@@ -1944,26 +1945,6 @@ Function EditorControls()
 		Text 719,100,"  Weird"
 	Case 7
 		Text 715,100,"ThundrStrm"
-	Case 8
-		Text 715,100,"  Alarm"
-	Case 9
-		Text 715,100,"Light Rise"
-	Case 10
-		Text 715,100,"Light Fall"
-	Case 11
-		Text 715,100,"Rainb Rise"
-	Case 12
-		Text 715,100,"Rainb Fall"
-	Case 13
-		Text 715,100,"  Foggy"
-	Case 14
-		Text 715,100,"FoggyGreen"
-	Case 15
-		Text 715,100,"  Leaves"
-	Case 16
-		Text 715,100,"Sand Storm"
-	Case 17
-		Text 715,100," Abstract"
 
 
 
@@ -2000,24 +1981,6 @@ Function EditorControls()
 		Text 719,115,"  Retro  "
 	Case 12
 		Text 719,115,"  Cave  "
-	Case 13
-		Text 719,115,"POTZ Intro"
-	Case 14
-		Text 719,115," Uo Sound"
-	Case 15
-		Text 719,115,"Z-Ambience"
-	Case 16
-		Text 719,115,"Z-Synchron"
-	Case 17
-		Text 719,115,"RetroScary"
-	Case 18
-		Text 719,115,"DesertWind"
-	Case 19
-		Text 719,115,"DesertCave"
-	Case 20
-		Text 719,115,"Star World"
-	Case 21
-		Text 719,115,"  Piano   "  
 
 
 
@@ -2063,12 +2026,12 @@ Function EditorControls()
 		If my>=115 And my<130 And leftmouse=True And leftmousereleased=True
 			leftmousereleased=False
 			levelmusic=levelmusic+1
-			If levelmusic=22 Then levelmusic=-1
+			If levelmusic=13 Then levelmusic=-1
 		EndIf
 		If my>=115 And my<130 And rightmouse=True And rightmousereleased=True
 			rightmousereleased=False
 			levelmusic=levelmusic-1
-			If levelmusic=-2 Then levelmusic=20
+			If levelmusic=-2 Then levelmusic=12
 		EndIf
 
 
@@ -2826,14 +2789,43 @@ Function EditorControls()
 			EndIf
 		EndIf
 	EndIf
-
 	
-
-
-
-
-
 	
+	If LeftMouse=True And LeftMouseReleased=True
+        If MX>=500 And MX<578
+            If my>520 And my<530
+                Delay 100
+                LoadTilePresetEX()
+            EndIf
+        EndIf
+    EndIf
+
+    If LeftMouse=True And LeftMouseReleased=True
+        If MX>=500 And MX<578
+            If my>545 And my<560
+                Delay 100
+                SaveTilePreset()
+            EndIf
+        EndIf
+    EndIf
+
+    If LeftMouse=True And LeftMouseReleased=True
+        If MX>=600 And MX<695
+            If my>520 And my<530
+                Delay 100
+                LoadObjectPresetEX()
+            EndIf
+        EndIf
+    EndIf
+
+    If LeftMouse=True And LeftMouseReleased=True
+        If MX>=600 And MX<695
+            If my>545 And my<560
+                Delay 100
+                SaveObjectPreset()
+            EndIf
+        EndIf
+    EndIf
 
 End Function
 
@@ -3191,6 +3183,42 @@ Function LoadTilePreset()
 
 End Function
 
+Function LoadTilePresetEX()
+	Locate 0,0
+	Color 0,0,0
+	Rect 0,0,500,40,True
+	Color 255,255,255
+	Filename$=Input ("FileName: ")
+	file=ReadFile("data\editor\tilepresets\"+filename$+".tp1")
+	If file Then
+	CurrentTileTexture=ReadInt(file)
+	CurrentTileRotation=ReadInt(file) 
+	CurrentTileSideTexture=ReadInt(file)
+	CurrentTileSideRotation=ReadInt(file)
+	CurrentTileRandom=ReadFloat(file)
+	CurrentTileHeight=ReadFloat(file)
+	CurrentTileExtrusion=ReadFloat(file)
+	CurrentTileRounding=ReadInt(file)
+	CurrentTileEdgeRandom=ReadInt(file)
+	CurrentTileLogic=ReadInt(file)
+	
+	
+	CurrentTileRandom2=CurrenTileRandom*1000
+	CurrentTileHeight2=CurrentTileHeight*100
+	CurrentTileExtrusion2=CurrentTileExtrusion*100
+	CurrentTileLogic2=CurrentTileLogic*10
+	
+	CurrentWaterTileTexture=ReadInt(file)
+	CurrentWaterTileRotation=ReadInt(file)
+	CurrentWaterTileHeight=ReadFloat(file)
+	CurrentWaterTileTurbulence=ReadFloat(file)
+	CurrentWaterTileHeight2=CurrentWaterTileHeight*100
+	CurrentWaterTileTurbulence2=CurrentWaterTileTurbulence*100
+
+
+	BuildCurrentTileModel()
+	EndIf
+End Function
 
 Function SaveTilePreset()
 	Locate 0,0
@@ -3199,7 +3227,7 @@ Function SaveTilePreset()
 	Color 255,255,255
 	Filename$=Input ("FileName: ")
 	file=WriteFile ("data\editor\tilepresets\"+filename$+".tp1")
-	
+	If file Then
 	WriteInt file,CurrentTileTexture
 	WriteInt file,CurrentTileRotation
 	WriteInt file,CurrentTileSideTexture
@@ -3218,14 +3246,14 @@ Function SaveTilePreset()
 	WriteFloat file,CurrentWaterTileTurbulence
 
 	CloseFile file
+	EndIf
 End Function
 
 Function LoadObjectPreset()
-	
 	Filename$="Data\Editor\ObjectPresets\"+ObjectPresetCategoryName$(CurrentObjectPresetCategory)+"\"+ObjectPresetObjectName$(CurrentObjectPresetObject)
 
 	file=ReadFile(filename$)
-	
+	If file Then
 	CurrentObjectModelName$=ReadString$(file)
 	CurrentObjectTextureName$=ReadString$(file)
 	CurrentObjectXScale#=ReadFloat(file)
@@ -3334,6 +3362,7 @@ Function LoadObjectPreset()
 	
 	NofObjectAdjusters=0
 	ObjectAdjusterStart=0
+	
 	For i=0 To 30
 		If Eof(file)=False
 			ObjectAdjuster$(i)=ReadString$(file)
@@ -3342,13 +3371,259 @@ Function LoadObjectPreset()
 			ObjectAdjuster$(i)=""
 		EndIf
 	Next
-	
 	CloseFile file
 	
 	
 	BuildCurrentObjectModel()
-	
+	EndIf
+End Function
 
+Function LoadObjectPresetEX()
+	Locate 0,0
+	Color 0,0,0
+	Rect 0,0,500,40,True
+	Color 255,255,255
+	Filename$=Input("FileName: ")
+	file=ReadFile("data\editor\objectpresets\"+filename$+".wop")
+	If file Then
+	CurrentObjectModelName$=ReadString$(file)
+	CurrentObjectTextureName$=ReadString$(file)
+	CurrentObjectXScale#=ReadFloat(file)
+	CurrentObjectYScale#=ReadFloat(file)
+	CurrentObjectZScale#=ReadFloat(file)
+	CurrentObjectXAdjust#=ReadFloat(file)
+	CurrentObjectYAdjust#=ReadFloat(file)
+	CurrentObjectZAdjust#=ReadFloat(file)
+	CurrentObjectPitchAdjust#=ReadFloat(file)
+	CurrentObjectYawAdjust#=ReadFloat(file)
+	CurrentObjectRollAdjust#=ReadFloat(file)
+	CurrentObjectX#=ReadFloat(file)
+	CurrentObjectY#=ReadFloat(file)
+	CurrentObjectZ#=ReadFloat(file)
+	CurrentObjectOldX#=ReadFloat(file)
+	CurrentObjectOldY#=ReadFloat(file)
+	CurrentObjectOldZ#=ReadFloat(file)
+	CurrentObjectDX#=ReadFloat(file)
+	CurrentObjectDY#=ReadFloat(file)
+	CurrentObjectDZ#=ReadFloat(file)
+	CurrentObjectPitch#=ReadFloat(file)
+	CurrentObjectYaw#=ReadFloat(file)
+	CurrentObjectRoll#=ReadFloat(file)
+	CurrentObjectPitch2#=ReadFloat(file)
+	CurrentObjectYaw2#=ReadFloat(file)
+	CurrentObjectRoll2#=ReadFloat(file)
+	CurrentObjectXGoal#=ReadFloat(file)
+	CurrentObjectYGoal#=ReadFloat(file)
+	CurrentObjectZGoal#=ReadFloat(file)
+	CurrentObjectMovementType=ReadInt(file)
+	CurrentObjectMovementTypeData=ReadInt(file)
+	CurrentObjectSpeed#=ReadFloat(file)
+	CurrentObjectRadius#=ReadFloat(file)
+	CurrentObjectRadiusType=ReadInt(file)
+	CurrentObjectCollisionPower=ReadInt(file)
+	CurrentObjectPushDX#=ReadFloat(file)
+	CurrentObjectPushDY#=ReadFloat(file)
+	CurrentObjectAttackPower=ReadInt(file)
+	CurrentObjectDefensePower=ReadInt(file)
+	CurrentObjectDestructionType=ReadInt(file)
+	CurrentObjectID=ReadInt(file)
+	CurrentObjectType=ReadInt(file)
+	CurrentObjectSubType=ReadInt(file)
+	CurrentObjectActive=ReadInt(file)
+	CurrentObjectLastActive=ReadInt(file)
+	CurrentObjectActivationType=ReadInt(file)
+	CurrentObjectActivationSpeed=ReadInt(file)
+	CurrentObjectStatus=ReadInt(file)
+	CurrentObjectTimer=ReadInt(file)
+	CurrentObjectTimerMax1=ReadInt(file)
+	CurrentObjectTimerMax2=ReadInt(file)
+	CurrentObjectTeleportable=ReadInt(file)
+	CurrentObjectButtonPush=ReadInt(file)
+	CurrentObjectWaterReact=ReadInt(file)
+	CurrentObjectTelekinesisable=ReadInt(file)
+	CurrentObjectFreezable=ReadInt(file)
+	CurrentObjectReactive=ReadInt(file)
+	CurrentObjectChild=ReadInt(file)
+	CurrentObjectParent=ReadInt(file)
+	For i=0 To 9
+		CurrentObjectData(i)=ReadInt(file)
+	Next
+	For i=0 To 3
+		CurrentObjectTextData$(i)=ReadString$(file)
+	Next
+	CurrentObjectTalkable=ReadInt(file)
+	CurrentObjectCurrentAnim=ReadInt(file)
+	CurrentObjectStandardAnim=ReadInt(file)
+	CurrentObjectTileX=ReadInt(file)
+	CurrentObjectTileY=ReadInt(file)
+	CurrentObjectTileX2=ReadInt(file)
+	CurrentObjectTileY2=ReadInt(file)
+	CurrentObjectFutureInt8=ReadInt(file)
+	CurrentObjectMovementSpeed=ReadInt(file)
+	CurrentObjectFutureInt10=ReadInt(file)
+	CurrentObjectFutureInt11=ReadInt(file)
+	CurrentObjectFutureInt12=ReadInt(file)
+	CurrentObjectFutureInt13=ReadInt(file)
+	CurrentObjectFutureInt14=ReadInt(file)
+	CurrentObjectFutureInt15=ReadInt(file)
+	CurrentObjectFutureInt16=ReadInt(file)
+	CurrentObjectExclamation=ReadInt(file)
+	CurrentObjectShadow=ReadInt(file)
+	CurrentObjectLinked=ReadInt(file)
+	CurrentObjectLinkBack=ReadInt(file)
+	CurrentObjectFutureInt21=ReadInt(file)
+	CurrentObjectFrozen=ReadInt(file)
+	CurrentObjectFutureInt23=ReadInt(file)
+	CurrentObjectFutureInt24=ReadInt(file)
+	CurrentObjectFutureInt25=ReadInt(file)
+
+	CurrentObjectScaleAdjust=ReadFloat(file)
+	CurrentObjectFutureFloat2=ReadFloat(file)
+	CurrentObjectFutureFloat3=ReadFloat(file)
+	CurrentObjectFutureFloat4=ReadFloat(file)
+	CurrentObjectFutureFloat5=ReadFloat(file)
+	CurrentObjectFutureFloat6=ReadFloat(file)
+	CurrentObjectFutureFloat7=ReadFloat(file)
+	CurrentObjectFutureFloat8=ReadFloat(file)
+	CurrentObjectFutureFloat9=ReadFloat(file)
+	CurrentObjectFutureFloat10=ReadFloat(file)
+	CurrentObjectFutureString1$=ReadString(file)
+	CurrentObjectFutureString2$=ReadString(file)
+	
+	NofObjectAdjusters=0
+	ObjectAdjusterStart=0
+	
+	For i=0 To 30
+		ObjectAdjuster$(i)=ReadString$(file)
+		NofObjectAdjusters=NofObjectAdjusters+1
+	Next
+	
+	CloseFile file
+	
+	BuildCurrentObjectModel()
+	EndIf
+End Function
+
+Function SaveObjectPreset()
+	Locate 0,0
+	Color 0,0,0
+	Rect 0,0,500,40,True
+	Color 255,255,255
+	Filename$=Input ("FileName: ")
+	file=WriteFile ("data\editor\objectpresets\"+filename$+".wop")
+    If file Then
+        WriteString(file, CurrentObjectModelName)
+        WriteString(file, CurrentObjectTextureName)
+        WriteFloat(file, CurrentObjectXScale)
+        WriteFloat(file, CurrentObjectYScale)
+        WriteFloat(file, CurrentObjectZScale)
+        WriteFloat(file, CurrentObjectXAdjust)
+        WriteFloat(file, CurrentObjectYAdjust)
+        WriteFloat(file, CurrentObjectZAdjust)
+        WriteFloat(file, CurrentObjectPitchAdjust)
+        WriteFloat(file, CurrentObjectYawAdjust)
+        WriteFloat(file, CurrentObjectRollAdjust)
+        WriteFloat(file, 0)
+        WriteFloat(file, 0)
+        WriteFloat(file, 0)
+        WriteFloat(file, CurrentObjectOldX)
+        WriteFloat(file, CurrentObjectOldY)
+        WriteFloat(file, CurrentObjectOldZ)
+        WriteFloat(file, CurrentObjectDX)
+        WriteFloat(file, CurrentObjectDY)
+        WriteFloat(file, CurrentObjectDZ)
+        WriteFloat(file, CurrentObjectPitch)
+        WriteFloat(file, CurrentObjectYaw)
+        WriteFloat(file, CurrentObjectRoll)
+        WriteFloat(file, CurrentObjectPitch2)
+        WriteFloat(file, CurrentObjectYaw2)
+        WriteFloat(file, CurrentObjectRoll2)
+        WriteInt(file, CurrentObjectXGoal)
+        WriteInt(file, CurrentObjectYGoal)
+        WriteInt(file, CurrentObjectZGoal)
+        WriteInt(file, CurrentObjectMovementType)
+        WriteInt(file, CurrentObjectMovementTypeData)
+        WriteFloat(file, CurrentObjectSpeed)
+        WriteFloat(file, CurrentObjectRadius)
+        WriteInt(file, CurrentObjectRadiusType)
+        WriteInt(file, CurrentObjectCollisionPower)
+        WriteFloat(file, CurrentObjectPushDX)
+        WriteFloat(file, CurrentObjectPushDY)
+        WriteInt(file, CurrentObjectAttackPower)
+        WriteInt(file, CurrentObjectDefensePower)
+        WriteInt(file, CurrentObjectDestructionType)
+        WriteInt(file, CurrentObjectID)
+        WriteInt(file, CurrentObjectType)
+        WriteInt(file, CurrentObjectSubType)
+        WriteInt(file, CurrentObjectActive)
+        WriteInt(file, CurrentObjectLastActive)
+        WriteInt(file, CurrentObjectActivationType)
+        WriteInt(file, CurrentObjectActivationSpeed)
+        WriteInt(file, CurrentObjectStatus)
+        WriteInt(file, CurrentObjectTimer)
+        WriteInt(file, CurrentObjectTimerMax1)
+        WriteInt(file, CurrentObjectTimerMax2)
+        WriteInt(file, CurrentObjectTeleportable)
+        WriteInt(file, CurrentObjectButtonPush)
+        WriteInt(file, CurrentObjectWaterReact)
+        WriteInt(file, CurrentObjectTelekinesisable)
+        WriteInt(file, CurrentObjectFreezable)
+        WriteInt(file, CurrentObjectReactive)
+        WriteInt(file, CurrentObjectChild)
+        WriteInt(file, CurrentObjectParent)
+
+        For i=0 To 9
+		    WriteInt(file, CurrentObjectData(i))
+	    Next
+
+        For i=0 To 3
+		    WriteString(file, CurrentObjectTextData(i))
+	    Next
+
+        WriteInt(file, CurrentObjectTalkable)
+        WriteInt(file, CurrentObjectCurrentAnim)
+        WriteInt(file, CurrentObjectStandardAnim)
+        WriteInt(file, 0)
+        WriteInt(file, 0)
+        WriteInt(file, 0)
+        WriteInt(file, 0)
+        WriteInt(file, CurrentObjectFutureInt8)
+        WriteInt(file, CurrentObjectMovementSpeed)
+        WriteInt(file, CurrentObjectFutureInt10)
+        WriteInt(file, CurrentObjectFutureInt11)
+        WriteInt(file, CurrentObjectFutureInt12)
+        WriteInt(file, CurrentObjectFutureInt13)
+        WriteInt(file, CurrentObjectFutureInt14)
+        WriteInt(file, CurrentObjectFutureInt15)
+        WriteInt(file, CurrentObjectFutureInt16)
+        WriteInt(file, CurrentObjectExclamation)
+        WriteInt(file, CurrentObjectShadow)
+        WriteInt(file, CurrentObjectLinked)
+        WriteInt(file, CurrentObjectLinkBack)
+        WriteInt(file, CurrentObjectFutureInt21)
+        WriteInt(file, CurrentObjectFrozen)
+        WriteInt(file, CurrentObjectFutureInt23)
+        WriteInt(file, CurrentObjectFutureInt24)
+        WriteInt(file, CurrentObjectFutureInt25)
+        WriteFloat(file, CurrentObjectScaleAdjust)
+        WriteFloat(file, CurrentObjectFutureFloat2)
+        WriteFloat(file, CurrentObjectFutureFloat3)
+        WriteFloat(file, CurrentObjectFutureFloat4)
+        WriteFloat(file, CurrentObjectFutureFloat5)
+        WriteFloat(file, CurrentObjectFutureFloat6)
+        WriteFloat(file, CurrentObjectFutureFloat7)
+        WriteFloat(file, CurrentObjectFutureFloat8)
+        WriteFloat(file, CurrentObjectFutureFloat9)
+        WriteFloat(file, CurrentObjectFutureFloat10)
+        WriteString(file, CurrentObjectFutureString1)
+        WriteString(file, CurrentObjectFutureString2)
+
+        For i = 0 To 30
+			WriteString(file, ObjectAdjuster$(i))
+	    Next
+
+	    CloseFile file
+	EndIf
 End Function
 
 Function PlaceObject(x#,y#)
@@ -3992,62 +4267,6 @@ Function DisplayObjectAdjuster(i)
 		
 	Case "DefensePower"
 		tex$=Str$(CurrentObjectDefensePower)
-		tex2$="Greeting"
-		Select CurrentObjectDefensePower
-		Case 0
-			tex$="Stinky1"
-		Case 1
-			tex$="Stinky2"
-		Case 2
-			tex$="Loof1"
-		Case 3
-			tex$="Loof2"
-		Case 4
-			tex$="Qookie1"
-		Case 5
-			tex$="Qookie2"
-		Case 6
-			tex$="Peegue1"
-		Case 7
-			tex$="Peegue2"
-		Case 8
-			tex$="Qookie3"
-		Case 9
-			tex$="Qookie4"
-
-		Case 10,11,12,13,14,15,16,17,18
-			tex$="Wee "+Str$(CurrentObjectDefensePower-9)
-		Case 19,20,21
-			tex$="Kaboom "+Str$(CurrentObjectDefensePower-18)
-
-		Case 22,23,24
-			tex$="ZBot "+Str$(CurrentObjectDefensePower-21)
-
-		Case 25
-			tex$="Chomper"
-		Case 26
-			tex$="Thwart 1"
-		Case 27
-			tex$="Thwart 2"
-		Case 28
-			tex$="Troll 1"
-		Case 29
-			tex$="Troll 2"
-		Case 30
-			tex$="Monster"
-		Case 31
-			tex$="Stinky 3"
-		Case 32
-			tex$="Stinky 4"
-		Case 33
-			tex$="Stinky 5"
-
-		End Select
-		
-		
-
-
-
 	Case "YawAdjust"
 		tex$=Str$(CurrentObjectYawAdjust)
 	Case "PitchAdjust"
@@ -4183,6 +4402,7 @@ Function DisplayObjectAdjuster(i)
 			
 		EndIf
 
+
 		
 	Case "WaterReact"
 		tex$=Str$(CurrentObjectWaterReact)
@@ -4190,12 +4410,8 @@ Function DisplayObjectAdjuster(i)
 	Case "Data0"
 		tex$=Str$(CurrentObjectData(0))
 		
-		If CurrentObjectModelName$="!Scritter" Or CurrentObjectModelName$="!Cuboid" Or CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!KeyCard" Or CurrentObjectTextureName$="!GloveTex"  Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage"  Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectType=424
+		If CurrentObjectModelName$="!Scritter" Or CurrentObjectModelName$="!Cuboid" Or CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectTextureName$="!GloveTex"  Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage"  Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectType=424
 			tex2$="Colour"
-		EndIf
-		
-		If CurrentObjectModelName$="!Obstacle51" Or CurrentObjectModelName$="!Obstacle55" Or CurrentObjectModelName$="!Obstacle59"
-			tex2$="Shape"
 		EndIf
 		
 		If CurrentObjectModelName$="!Obstacle48" ; (wysp ship)
@@ -4256,16 +4472,6 @@ Function DisplayObjectAdjuster(i)
 		EndIf
 		If CurrentObjectModelName$="!Gem"
 			tex2$="Shape"
-		EndIf
-		If CurrentObjectModelName$="!Crystal"
-			tex2$="Type"
-			Select CurrentObjectData(0)
-			Case 0
-				tex$="Rainbow"
-			Case 1
-				tex$="Void"
-			End Select
-
 		EndIf
 
 		If CurrentObjectModelName$="!Bowler"
@@ -4332,7 +4538,7 @@ Function DisplayObjectAdjuster(i)
 				tex$="NorthWest"
 			End Select
 		EndIf
-		If CurrentObjectModelName$="!Turtle" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectType<>424) Or CurrentObjectModelName$="!Weebot"  Or CurrentObjectModelName$="!Zapbot"
+		If CurrentObjectModelName$="!Turtle" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectType<>424)
 			tex2$="Direction"
 			
 			Select CurrentObjectData(0)
@@ -4421,13 +4627,6 @@ Function DisplayObjectAdjuster(i)
 			Case 6
 				tex$="Blink"
 			End Select
-		EndIf
-		
-		If CurrentObjectModelName$="!Mothership"
-			tex2$="TimerMax"
-		EndIf	
-		If CurrentObjectModelName$="!Ghost" Or CurrentObjectModelName$="!Wraith"
-			tex2$="Radius"
 		EndIf		
 
 
@@ -4437,17 +4636,8 @@ Function DisplayObjectAdjuster(i)
 
 	Case "Data1"
 		tex$=Str$(CurrentObjectData(1))
-		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key"  Or CurrentObjectModelName$="!KeyCard" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!Retrolasergate" Or CurrentObjectModelName$="!Pushbot" Or CurrentObjectModelname$="!Autodoor" Or CurrentObjectModelname$="!Suctube" Or CurrentObjectModelName$="!Conveyor"
+		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!Retrolasergate"
 			tex2$="SubColour"
-		EndIf
-		
-		If CurrentObjectModelName$="!CustomModel"
-			tex2$="PitchAnim"
-		EndIf
-
-		
-		If CurrentObjectModelName$="!Obstacle51" Or CurrentObjectModelName$="!Obstacle55" Or CurrentObjectModelName$="!Obstacle59"
-			tex2$="Texture"
 		EndIf
 		
 		If CurrentObjectModelName$="!Cuboid"
@@ -4526,8 +4716,6 @@ Function DisplayObjectAdjuster(i)
 				tex$="Ghost"
 			Else If currentobjectData(1)=2
 				tex$="Glow"
-			Else
-				tex$="Mecha"
 			EndIf
 			
 			
@@ -4600,7 +4788,7 @@ Function DisplayObjectAdjuster(i)
 			tex2$="Goal X"
 		EndIf
 
-		If  (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectModelName$<>"!Retrolasergate") Or CurrentObjectModelName$="!Weebot"  Or CurrentObjectModelName$="!Zapbot"
+		If  (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectModelName$<>"!Retrolasergate")
 
 			tex2$="Turning"
 			If CurrentObjectData(1)=0
@@ -4611,26 +4799,15 @@ Function DisplayObjectAdjuster(i)
 			EndIf
 		EndIf
 		
-		If CurrentObjectModelName$="!Ghost" 
-			tex2$="Speed"
-		EndIf
-		If CurrentObjectModelName$="!Wraith"
-			tex2$="ShotTime"
-		EndIf
-		
 
 
 		
 	Case "Data2" 
 		tex$=Str$(CurrentObjectData(2))
-		If CurrentObjectModelName$="!Spring"  Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!FlipBridge"  Or CurrentObjectModelName$="!Pushbot" Or CurrentObjectModelName$="!Suctube"  Or CurrentObjectModelName$="!SuctubeX" Or CurrentObjectModelName$="!Conveyor"
+		If CurrentObjectModelName$="!Spring"  Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!FlipBridge"
 
 			tex2$="Direction"
 			If CurrentObjectModelName$="!Transporter" Then tex$=Str$(3-CurrentObjectData(2))
-		EndIf
-		
-		If CurrentObjectModelName$="!CustomModel"
-			tex2$="RollAnim"
 		EndIf
 
 		If CurrentObjectModelName$="!Button"
@@ -4842,15 +5019,6 @@ Function DisplayObjectAdjuster(i)
 			
 			EndIf
 		EndIf
-		If CurrentObjectModelName$="!ZbotNPC" 
-			tex2$="Turning"
-			If CurrentObjectData(2)=0
-				tex$="Player"
-			Else
-				tex$="Fixed"
-			EndIf
-			
-		EndIf
 
 		If CurrentObjectModelName$="!Sign"
 			tex2$="Move"
@@ -4873,28 +5041,8 @@ Function DisplayObjectAdjuster(i)
 			tex2$="Goal Y"
 		EndIf
 		
-		If  CurrentObjectModelName$="!Zapbot"
-			tex2$="Speed"
-		EndIf
-		
 		If  CurrentObjectModelName$="!Cuboid"
 			tex2$="Explo Command"
-		EndIf
-		
-		If CurrentObjectModelName$="!Mothership"
-			tex2$="SourceX"
-		EndIf
-		
-		If CurrentObjectModelName$="!Wraith"
-			tex2$="Magic"
-			Select CurrentObjectData(2)
-			Case 0
-				tex$="Fire"
-			Case 1
-				tex$="Ice"
-			Case 2
-				tex$="Grow"
-			End Select
 		EndIf
 
 
@@ -4902,22 +5050,15 @@ Function DisplayObjectAdjuster(i)
 		
 	Case "Data3"
 		tex$=Str$(CurrentObjectData(3))
-		If CurrentObjectModelName$="!Suctube"  Or CurrentObjectModelName$="!SuctubeX"
-			tex2$="Style"
-			
-		EndIf
-		If CurrentObjectModelName$="!CustomModel"
-			tex2$="XAnim"
-		EndIf
 
-		If CurrentObjectModelName$="!Pushbot" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectType=45
+		If CurrentObjectModelName$="!Transporter" Or CurrentObjectType=45
 			tex2$="Turn"
 			If CurrentObjectData(3)=0
 				tex$="Left"
 			Else If CurrentObjectData(3)=1
 
 				tex$="Right"
-			Else ; only for pushbots
+			Else
 				tex$="180"
 			EndIf
 		EndIf
@@ -5127,27 +5268,15 @@ Function DisplayObjectAdjuster(i)
 				
 			
 		EndIf
-		
-		If  CurrentObjectModelName$="!Zapbot"
-			tex2$="Range"
-		EndIf
-		
-		If  CurrentObjectModelName$="!Cuboid"
-			tex2$="Cmd Data1"
-		EndIf
-		
-		If CurrentObjectModelName$="!Mothership"
-			tex2$="SourceY"
-		EndIf
 
+
+	If CurrentObjectModelName$="!Cuboid"
+		tex2$="Cmd Data1"
+	EndIf
 
 
 	Case "Data4"
 		tex$=Str$(CurrentObjectData(4))
-		
-		If CurrentObjectModelName$="!CustomModel"
-			tex2$="YAnim"
-		EndIf
 
 		If CurrentObjectModelName$="!Button"
 			If (CurrentObjectSubType Mod 32)<5
@@ -5170,18 +5299,6 @@ Function DisplayObjectAdjuster(i)
 				If CurrentObjectData(4)=-1 Then	tex$="No Change"
 
 
-			EndIf
-		EndIf
-		If CurrentObjectModelName$="!Conveyor"
-			tex2$="Visual Type"
-		EndIf
-		
-		If CurrentObjectModelName$="!Suctube"  
-			tex2$="Sound"
-			If CurrentObjectData(4)=0
-				tex$="Normal"
-			Else 
-				tex$="Portal"
 			EndIf
 		EndIf
 		
@@ -5237,43 +5354,18 @@ Function DisplayObjectAdjuster(i)
 			End Select
 		EndIf
 		
-		If  CurrentObjectModelName$="!Zapbot" Or CurrentObjectModelName$="!Ufo"
+		If CurrentObjectModelName$="!Ufo"
 
 			tex2$="Track"
-		EndIf
-		
-		If CurrentObjectModelName$="!Autodoor"
-			If CurrentObjectData(4)>=0
-				tex2$="ActivateID"
-			Else
-				tex2$="ActivateType"
-				tex$=Str$(-CurrentObjectData(4))
-			EndIf
 		EndIf
 
 		If  CurrentObjectModelName$="!Cuboid"
 			tex2$="Cmd Data2"
 		EndIf
-		If CurrentObjectModelName$="!Mothership"
-			tex2$="FlyGoalX1"
-		EndIf
 
 
 	Case "Data5"
 		tex$=Str$(CurrentObjectData(5))
-		If CurrentObjectModelName$="!Suctube"
-			tex2$="Particles"
-			If CurrentObjectData(5)=0
-				tex$="Yes"
-			Else
-				tex$="No"
-			EndIf
-			
-		EndIf
-		
-		If CurrentObjectModelName$="!CustomModel"
-			tex2$="ZAnim"
-		EndIf
 
 		
 
@@ -5305,14 +5397,6 @@ Function DisplayObjectAdjuster(i)
 		If CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Obstacle36" Or CurrentObjectModelName$="!Obstacle37" Or CurrentObjectModelName$="!Obstacle38" Or CurrentObjectModelName$="!Obstacle39" Or CurrentObjectModelName$="!Obstacle40"
 			tex2$="Style"
 		EndIf
-		If CurrentObjectModelName$="!Conveyor"
-			tex2$="Logic"
-			If CurrentObjectData(5)=0
-				tex$="Move"
-			Else
-				tex$="Step"
-			EndIf
-		EndIf
 		
 		
 		If CurrentObjectModelName$="!NPC"
@@ -5340,33 +5424,19 @@ Function DisplayObjectAdjuster(i)
 			tex2$="Red"
 		EndIf
 		
-		If CurrentObjectModelName$="!Autodoor"
-			If CurrentObjectData(5)>=0
-				tex2$="ActivateID"
-			Else
-				tex2$="ActivateType"
-				tex$=Str$(-CurrentObjectData(5))
-			EndIf
-		EndIf
-		
 		If  CurrentObjectModelName$="!Cuboid"
 			tex2$="Cmd Data3"
 		EndIf
-
-
-		If CurrentObjectModelName$="!Mothership"
-			tex2$="FlyGoalY1"
-		EndIf
+		
+		
 
 
 		
 	Case "Data6"
 		tex$=Str$(CurrentObjectData(6))
-		
-		If CurrentObjectModelName$="!CustomModel"
+		if CurrentObjectModelName$="!CustomModel"
 			tex2$="XSpeed"
 		EndIf
-
 		If CurrentObjectModelName$="!Button"
 			If (CurrentObjectSubType Mod 32)<5
 				tex2$="SubColour3"
@@ -5398,7 +5468,7 @@ Function DisplayObjectAdjuster(i)
 			End Select
 		EndIf
 		
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll" Or CurrentObjectModelName$="!ZbotNPC"
+		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll"
 
 			tex2$="Shooter"
 			Select CurrentObjectData(6)
@@ -5412,33 +5482,13 @@ Function DisplayObjectAdjuster(i)
 		If CurrentObjectModelName$="!GlowWorm"  Or CurrentObjectModelName$="!Zipper"
 			tex2$="Green"
 		EndIf
-
-		If CurrentObjectModelName$="!Autodoor"
-			If CurrentObjectData(6)>=0
-				tex2$="ActivateID"
-			Else
-				tex2$="ActivateType"
-				tex$=Str$(-CurrentObjectData(6))
-			EndIf
-		EndIf
-		If CurrentObjectModelName$="!Conveyor"
-			tex2$="ActivationWait"
-		EndIf
 		
 		If  CurrentObjectModelName$="!Cuboid"
 			tex2$="Cmd Data4"
 		EndIf
 
-		If CurrentObjectModelName$="!Mothership"
-			tex2$="FlyGoalX2"
-		EndIf
-
-
 	Case "Data7"
 		tex$=Str$(CurrentObjectData(7))
-		If CurrentObjectModelName$="!CustomModel"
-			tex2$="YSpeed"
-		EndIf
 
 		If CurrentObjectModelName$="!Button"
 			If (CurrentObjectSubType Mod 32)<5
@@ -5471,31 +5521,19 @@ Function DisplayObjectAdjuster(i)
 			If CurrentObjectData(7) >=20 And CurrentObjectData(7)<30 tex$=tex$+"BouFas"
 		EndIf
 		
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll" Or CurrentObjectModelName$="!ZbotNPC"
+		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll"
 
 			tex2$="TimerMax1"
 		EndIf
 		If CurrentObjectModelName$="!GlowWorm"  Or CurrentObjectModelName$="!Zipper"
 			tex2$="Blue"
 		EndIf
-		
-		If CurrentObjectModelName$="!Autodoor"
-			tex2$="StayOnTimer"
-			
-		EndIf
-
-		If CurrentObjectModelName$="!Mothership"
-			tex2$="FlyGoalY2"
-		EndIf
 
 
 
 	Case "Data8"
 		tex$=Str$(CurrentObjectData(8))
-		If CurrentObjectModelName$="!CustomModel"
-			tex2$="ZSpeed"
-		EndIf
-
+		
 		If CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!Button"
 			tex2$="ActivateID"
 			If CurrentObjectData(8)=0
@@ -5556,33 +5594,11 @@ Function DisplayObjectAdjuster(i)
 			
 			
 		EndIf
-		
-		If CurrentObjectModelName$="!ZbotNPC"
-			
-			tex2$="IntroSound"
-			If CurrentObjectData(8)=0 tex$="On"
-			If CurrentObjectData(8)=1 tex$="Off"
-			
-		EndIf
-
-
-
-		If CurrentObjectModelName$="!Mothership"
-			tex2$="FlyGoalX3"
-		EndIf
 
 
 
 	Case "Data9"
 		tex$=Str$(CurrentObjectData(9))
-		
-		If CurrentObjectModelName$="!CustomModel"
-			tex2$="Deadly"
-			If CurrentObjectData(9)=0 tex$="No"
-			If CurrentObjectData(9)=1 tex$="Yes"
-			
-
-		EndIf
 
 		If CurrentObjectModelName$="!Button"
 			If CurrentObjectSubType = 11 And CurrentObjectData(0)=1
@@ -5602,15 +5618,6 @@ Function DisplayObjectAdjuster(i)
 			EndIf
 		EndIf
 		
-		If CurrentObjectModelName$="!Conveyor"
-			tex2$="Tail Length"
-		EndIf
-		
-				
-				
-		If CurrentObjectModelName$="!Mothership"
-			tex2$="FlyGoalY3"
-		EndIf
 
 		
 	Case "Talkable"
@@ -5670,11 +5677,9 @@ Function AdjustObjectAdjuster(i)
 		If Fast Adj=1
 		If LeftMouse=True 
 			CurrentObjectDefensePower=CurrentObjectDefensePower+Adj
-			If CurrentObjectDefensePower>=34 Then CurrentObjectDefensePower=0
 		EndIf
 		If RightMouse=True
 			CurrentObjectDefensePower=CurrentObjectDefensePower-Adj
-			If CurrentObjectDefensePower<0 Then CurrentObjectDefensePower=33
 		EndIf
 		
 		Delay 150
@@ -5910,7 +5915,6 @@ Function AdjustObjectAdjuster(i)
 					CurrentObjectActivationType=11
 				EndIf
 			EndIf
-
 		Else
 			If LeftMouse=True Then CurrentObjectActivationType=CurrentObjectActivationType+Adj
 			If RightMouse=True  Then CurrentObjectActivationType=CurrentObjectActivationType-Adj
@@ -5966,7 +5970,7 @@ Function AdjustObjectAdjuster(i)
 
 	
 
-		Else If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)<10 Or (CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!ColourGate"  Or CurrentObjectModelName$="!Pushbot" Or CurrentObjectModelName$="!Autodoor" Or CurrentObjectModelName$="!Suctube" Or CurrentObjectModelName$="!Conveyor" 
+		Else If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)<10 Or (CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Pushbot" Or CurrentObjectModelName$="!Autodoor" Or CurrentObjectModelName$="!Suctube" Or CurrentObjectModelName$="!Conveyor"
 
 			; colours 0-15
 			If CurrentObjectData(0)>15 CurrentObjectData(0)=0
@@ -6025,7 +6029,7 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(0)>7 CurrentObjectData(0)=0
 			If CurrentObjectData(0)<0 CurrentObjectData(0)=7
 		EndIf
-		If CurrentObjectModelName$="!Turtle" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectType<>424) Or CurrentObjectModelName$="!Weebot" Or Currentobjectmodelname$="!Zapbot"
+		If CurrentObjectModelName$="!Turtle" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectType<>424)
 			If CurrentObjectData(0)>3 CurrentObjectData(0)=0
 			If CurrentObjectData(0)<0 CurrentObjectData(0)=3
 		EndIf
@@ -6064,13 +6068,6 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(0)>2 CurrentObjectData(0)=0
 			If CurrentObjectData(0)<0 CurrentObjectData(0)=2
 		EndIf
-		
-		If CurrentObjectModelName$="!Ghost" Or CurrentObjectModelName$="!Wraith"
-			
-			If CurrentObjectData(1)<2 CurrentObjectData(1)=2
-			
-
-		EndIf
 
 
 
@@ -6086,7 +6083,7 @@ Function AdjustObjectAdjuster(i)
 		If Fast Adj=10
 		If LeftMouse=True Then CurrentObjectData(1)=CurrentObjectData(1)+Adj
 		If RightMouse=True Then CurrentObjectData(1)=CurrentObjectData(1)-Adj
-		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter"  Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!KeyCard" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!Retrolasergate"  Or CurrentObjectModelName$="!Pushbot" Or CurrentObjectModelName$="!Autodoor" Or CurrentObjectModelName$="!Suctube" Or CurrentObjectModelName$="!Conveyor"
+		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter"  Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!Retrolasergate"
 
 
 			; subcolours 0-4
@@ -6097,11 +6094,6 @@ Function AdjustObjectAdjuster(i)
 			; colours 0-15
 			If CurrentObjectData(1)>15 CurrentObjectData(1)=0
 			If CurrentObjectData(1)<0 CurrentObjectData(1)=15
-		EndIf
-		
-		If CurrentObjectModelName$="!Obstacle51" Or CurrentObjectModelName$="!Obstacle55" Or CurrentObjectModelName$="!Obstacle59"
-			If CurrentObjectData(1)>3 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=3
 		EndIf
 	
 		
@@ -6140,8 +6132,8 @@ Function AdjustObjectAdjuster(i)
 			EndIf
 		EndIf
 		If CurrentObjectModelName$="!Chomper"
-			If CurrentObjectData(1)>3 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=3
+			If CurrentObjectData(1)>2 CurrentObjectData(1)=0
+			If CurrentObjectData(1)<0 CurrentObjectData(1)=2
 		EndIf
 		If CurrentObjectModelName$="!Turtle"
 			If CurrentObjectData(1)>1 CurrentObjectData(1)=0
@@ -6160,7 +6152,7 @@ Function AdjustObjectAdjuster(i)
 			
 
 		EndIf
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectModelName$<>"!Retrolasergate")  Or CurrentObjectModelName$="!Weebot" Or Currentobjectmodelname$="!Zapbot" Or CurrentObjectModelname$="!Portal Warp"
+		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectModelName$<>"!Retrolasergate")
 
 			If CurrentObjectData(1)>1 CurrentObjectData(1)=0
 			If CurrentObjectData(1)<0 CurrentObjectData(1)=1
@@ -6171,12 +6163,6 @@ Function AdjustObjectAdjuster(i)
 		If CurrentObjectModelName$="!Sign"
 			If CurrentObjectData(1)>5 CurrentObjectData(1)=0
 			If CurrentObjectData(1)<0 CurrentObjectData(1)=5
-			
-
-		EndIf
-		If CurrentObjectModelName$="!Ghost"
-			If CurrentObjectData(1)>9 CurrentObjectData(1)=1
-			If CurrentObjectData(1)<1 CurrentObjectData(1)=9
 			
 
 		EndIf
@@ -6198,17 +6184,6 @@ Function AdjustObjectAdjuster(i)
 			; direction 0-7
 			If CurrentObjectData(2)>7 CurrentObjectData(2)=0
 			If CurrentObjectData(2)<0 CurrentObjectData(2)=7
-		EndIf
-		If CurrentObjectModelName$="!Suctube"  Or CurrentObjectModelName$="!SuctubeX" Or CurrentObjectModelName$="!Conveyor"
-			; direction 0-3
-			If CurrentObjectData(2)>3 CurrentObjectData(2)=0
-			If CurrentObjectData(2)<0 CurrentObjectData(2)=3
-		EndIf
-
-		If CurrentObjectModelName$="!Transporter"  Or CurrentObjectModelName$="!Weebot" Or Currentobjectmodelname$="!Zapbot"  Or CurrentObjectModelName$="!Pushbot"
-			; direction 0-3 (or speed for zap/weebot)
-			If CurrentObjectData(2)>3 CurrentObjectData(2)=0
-			If CurrentObjectData(2)<0 CurrentObjectData(2)=3
 		EndIf
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
 			; colours 0-15
@@ -6265,14 +6240,12 @@ Function AdjustObjectAdjuster(i)
 
 		EndIf
 		
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!ZbotNPC"
+		If CurrentObjectModelName$="!Thwart"
 			If CurrentObjectData(2)>7 CurrentObjectData(2)=0
 			If CurrentObjectData(2)<0 CurrentObjectData(2)=7
 			
 
 		EndIf
-
-
 
 		If CurrentObjectModelName$="!Sign"
 			If CurrentObjectData(2)>3 CurrentObjectData(2)=0
@@ -6280,14 +6253,6 @@ Function AdjustObjectAdjuster(i)
 			
 
 		EndIf
-		
-		If CurrentObjectModelName$="!Wraith"
-			If CurrentObjectData(2)>2 CurrentObjectData(2)=0
-			If CurrentObjectData(2)<0 CurrentObjectData(2)=2
-
-		EndIf
-
-
 
 
 		Delay 150
@@ -6376,16 +6341,6 @@ Function AdjustObjectAdjuster(i)
 
 
 		EndIf
-		If  Currentobjectmodelname$="!Zapbot"
-			; zapbot range
-			If CurrentobjectData(3)<4 CurrentObjectData(3)=4
-			If CurrentobjectData(3)>30 CurrentObjectData(3)=30
-		EndIf
-		If  Currentobjectmodelname$="!Pushbot" 
-			; pushbot left/right turn,
-			If CurrentobjectData(3)<0 CurrentObjectData(3)=0
-			If CurrentobjectData(3)>2 CurrentObjectData(3)=2
-		EndIf
 		If  CurrentObjectType=45
 			; conveyor lead
 			If CurrentobjectData(3)<0 CurrentObjectData(3)=0
@@ -6396,12 +6351,6 @@ Function AdjustObjectAdjuster(i)
 			; pushbot left/right turn,
 			If CurrentobjectData(3)<1 CurrentObjectData(3)=1
 			
-		EndIf
-
-		If  Currentobjectmodelname$="!Suctube" Or CurrentObjectModelName$="!SuctubeX"
-			; Suctube tex
-			If CurrentobjectData(3)<0 CurrentObjectData(3)=0
-			If CurrentobjectData(3)>2 CurrentObjectData(3)=2
 		EndIf
 
 
@@ -6452,22 +6401,7 @@ Function AdjustObjectAdjuster(i)
 		EndIf
 		
 		
-		If  Currentobjectmodelname$="!Zapbot" Or CurrentObjectModelName$="!Ufo"
-
-			; zapbot track?
-			If CurrentobjectData(4)<0 CurrentObjectData(4)=0
-			If CurrentobjectData(4)>1 CurrentObjectData(4)=1
-		EndIf
-		
-		
-		If  Currentobjectmodelname$="!Conveyor"
-			; visual type
-			If CurrentobjectData(4)<0 CurrentObjectData(4)=0
-			If CurrentobjectData(4)>4 CurrentObjectData(4)=4
-		EndIf
-
-
-		If CurrentObjectModelName$="!Suctube"  
+		If CurrentObjectModelName$="!Ufo"
 			If CurrentobjectData(4)<0 CurrentObjectData(4)=0
 			If CurrentobjectData(4)>1 CurrentObjectData(4)=1
 		EndIf
@@ -6507,33 +6441,17 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(5)<0 CurrentObjectData(5)=1
 
 		EndIf
-
-
-		If CurrentObjectModelName$="!NPC" Or Currentobjectmodelname$="!Conveyor"
+		
+		If CurrentObjectModelName$="!NPC"
 			If CurrentObjectData(5)>1 CurrentObjectData(5)=0
 			If CurrentObjectData(5)<0 CurrentObjectData(5)=1
-			
-
 		EndIf
 		If CurrentObjectModelName$="!NPC" And (CurrentObjectData(4)<>101 And CurrentObjectData(4)<>102) Then CurrentObjectData(5)=0
 		
 		If CurrentObjectModelName$="!GlowWorm"  Or CurrentObjectModelName$="!Zipper"
 			If CurrentObjectData(5)>255 CurrentObjectData(5)=0
 			If CurrentObjectData(5)<0 CurrentObjectData(5)=255
-			
-
 		EndIf
-		
-		If CurrentObjectModelName$="!Suctube"
-			If CurrentObjectData(5)>1 CurrentObjectData(5)=0
-			If CurrentObjectData(5)<0 CurrentObjectData(5)=1
-			
-
-		EndIf
-
-			
-
-
 		
 		Delay 150
 	Case "Data6"
@@ -6563,7 +6481,7 @@ Function AdjustObjectAdjuster(i)
 			
 
 		EndIf
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll" Or CurrentObjectModelName$="!ZbotNPC"
+		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll"
 			If CurrentObjectData(6)>1 CurrentObjectData(6)=0
 			If CurrentObjectData(6)<0 CurrentObjectData(6)=1
 			
@@ -6653,7 +6571,7 @@ Function AdjustObjectAdjuster(i)
 
 		EndIf
 
-		If CurrentObjectModelName$="!BabyBoomer" Or CurrentObjectModelName$="!ZbotNPC"
+		If CurrentObjectModelName$="!BabyBoomer"
 
 			If CurrentObjectData(8)>1 CurrentObjectData(8)=0
 			If CurrentObjectData(8)<0 CurrentObjectData(8)=1
@@ -6675,21 +6593,10 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(9)=CurrentObjectData(9)+Adj
 		If RightMouse=True Then CurrentObjectData(9)=CurrentObjectData(9)-Adj
 		
-		If  CurrentObjectModelName$="!CustomModel"
-			If CurrentobjectData(9)>1 CurrentObjectData(9)=1
-			If CurrentobjectData(9)<0 CurrentObjectData(9)=0
-		EndIf
-		
 		If  CurrentObjectModelName$="!Button" And CurrentObjectSubType=11 And CurrentObjectData(0)=1
 			; anim
 			If CurrentobjectData(9)<-1 CurrentObjectData(9)=10
 			If CurrentobjectData(9)>10 CurrentObjectData(9)=-1
-		EndIf
-		
-		If CurrentObjectModelName$="!Conveyor"
-
-			
-			If CurrentObjectData(9)<1 CurrentObjectData(9)=1
 		EndIf
 
 
@@ -8282,7 +8189,7 @@ Function LoadLevel(levelnumber)
 	FreeTexture watertexture
 	leveltexture=0
 	If currentleveltexture=-1
-		LevelTexture=myLoadTexture(globaldirname$+"\Custom Content\leveltextures\leveltex "+LevelTextureCustomName$+".bmp",1)
+		LevelTexture=myLoadTexture(globaldirname$+"\custom content\leveltextures\leveltex "+LevelTextureCustomName$+".bmp",1)
 		If leveltexture=0
 			Locate 0,0
 			Color 0,0,0
@@ -8300,7 +8207,7 @@ Function LoadLevel(levelnumber)
 	
 	watertexture=0
 	If currentwatertexture=-1
-		WaterTexture=myLoadTexture(globaldirname$+"\Custom Content\leveltextures\watertex "+WaterTextureCustomName$+".jpg",2)
+		WaterTexture=myLoadTexture(globaldirname$+"\custom content\textures\watertex "+WaterTextureCustomName$+".jpg",2)
 		If Watertexture=0
 			Locate 0,0
 			Color 0,0,0
@@ -8688,25 +8595,6 @@ Function LoadLevel(levelnumber)
 		Else If ObjectModelName$(Dest)="!Wisp"
 			ObjectEntity(Dest)=CopyMesh(StarMesh)
 			EntityTexture ObjectEntity(Dest),WispTexture
-			
-	
-			
-		Else If ObjectModelName$(Dest)="!Portal Warp"
-			ObjectEntity(Dest)=CopyEntity(PortalWarpMesh)
-			If ObjectData(Dest,1)=0
-				EntityTexture ObjectEntity(Dest),StarTexture
-			Else
-				EntityTexture ObjectEntity(Dest),RainbowTexture
-			EndIf
-			
-		Else If ObjectModelName$(Dest)="!Sun Sphere1"
-			ObjectEntity(Dest)=CreateSphere()
-			PositionMesh ObjectEntity(Dest),0,1.5,0
-			EntityAlpha ObjectEntity(Dest),.5
-			EntityColor ObjectEntity(Dest),ObjectData(Dest,0),ObjectData(Dest,1),ObjectData(Dest,2)
-
-
-
 
 		Else If ObjectModelName$(Dest)="!Coin"
 			ObjectEntity(Dest)=CopyMesh(CoinMesh)
@@ -8720,16 +8608,7 @@ Function LoadLevel(levelnumber)
 			ObjectEntity(Dest)=CopyEntity(GemMesh(ObjectData(Dest,0))) 
 			EntityTexture ObjectEntity(Dest),GoldStarTexture
 			EntityTexture ObjectEntity(Dest),TeleporterTexture(ObjectData(Dest,1))
-		
-		Else If ObjectModelName$(dest)="!Crystal"
-			ObjectEntity(Dest)=CopyEntity(GemMesh(2))
-			If objectdata(dest,0)=0
-				EntityTexture ObjectEntity(Dest),rainbowtexture
-			Else
-				EntityTexture ObjectEntity(Dest),ghosttexture
-			EndIf
-
-
+			
 		Else If ObjectModelName$(Dest)="!CustomItem"
 			ObjectEntity(Dest)=CreateCustomItemMesh(ObjectData(Dest,0))
 		Else If ObjectModelName$(Dest)="!Sign"
@@ -8741,9 +8620,6 @@ Function LoadLevel(levelnumber)
 		Else If ObjectModelName$(Dest)="!Barrel2"
 			ObjectEntity(Dest)=CopyEntity(BarrelMesh)
 			EntityTexture ObjectEntity(Dest),BarrelTexture2
-		Else If ObjectModelName$(Dest)="!Barrel3"
-			ObjectEntity(Dest)=CopyEntity(BarrelMesh)
-			EntityTexture ObjectEntity(Dest),BarrelTexture3
 		Else If ObjectModelName$(Dest)="!Cuboid"
 			ObjectEntity(Dest)=CreateCube()
 			ScaleMesh ObjectEntity(Dest),0.4,0.4,0.4
@@ -8873,24 +8749,6 @@ Function LoadLevel(levelnumber)
 			EntityTexture ObjectEntity(Dest),FenceTexture(ObjectData(Dest,5))	
 		Else If ObjectTextureName$(Dest)="!FireTrap"
 			EntityTexture ObjectEntity(Dest),FireTrapTexture
-			
-		
-		Else If Left(ObjectTextureName$(Dest),1)="?"
-		; custom texture for existing objects
-		tname$="UserData\Custom Content\Objecttextures\"+Right(ObjectTextureName$(Dest),Len(ObjectTextureName$(Dest))-1)+".jpg"
-	
-		If FileType(tname$)<>1 
-			tname$="UserData\Custom Content\Objecttextures\default.jpg"
-			ObjectTextureName$(Dest)="?Default"
-		EndIf
-		ObjectTexture(Dest)=LoadTexture(tname$)
-		EntityTexture ObjectEntity(Dest),ObjectTexture(Dest)
-
-
-
-
-
-
 		Else If Left$(ObjectTextureName$(Dest),2)="!T"
 			;ObjectTexture(Dest)=LoadTexture("data2/models/stinker/body001a.jpg")
 			EntityTexture ObjectEntity(Dest),StinkerTexture
@@ -10259,7 +10117,7 @@ Function UserSelectScreen()
 		waitflag=True
 	EndIf
 	
-	If MouseDown(1)
+	If MouseHit(1)
 		If FileType(GlobalDirName$+"\Adventures\Editing\Profiles\"+EditorUserNamesListed$(EditorUserNameSelected))=2 And EditorUserNamesListed$(EditorUserNameSelected)<>""
 			EditorUserName$=EditorUserNamesListed$(EditorUserNameSelected)
 			file=WriteFile(GlobalDirName$+"\Adventures\Editing\Profiles\currentuser.dat")
@@ -10449,25 +10307,6 @@ Function AdventureSelectScreen()
 			Repeat
 			Until MouseDown(1)=0
 		EndIf
-		
-		If my<50 And mx>650
-			; switch window/fullscreen
-			DisplayFullScreen = Not DisplayFullScreen
-			filed=WriteFile (globaldirname$+"\display-ed.wdf")
-			If filed>0
-			
-				WriteInt filed,DisplayFullScreen
-				CloseFile filed
-			EndIf
-			
-			; and restart
-			Cls
-			Flip
-			Print "Note: Screenmode will be switched upon next restart."
-			Delay 4000
-			 
-			
-		EndIf
 
 		
 		If my>123 And my<143 And mx>507 And mx<650 And AdventureCurrentArchive=1
@@ -10507,10 +10346,6 @@ Function AdventureSelectScreen()
 	RenderLetters()
 	UpdateWorld 
 	RenderWorld
-	
-	If displayfullscreen=True
-				DrawImage mouseimg,MouseX(),MouseY()
-			EndIf
 	Flip
 	If waitflag=True Delay 2000
 	
@@ -10588,11 +10423,11 @@ Function AdventureSelectScreen2()
 			ex$=AdventureFileNamesListed$(AdventureNameSelected+AdventureFileNamesListedStart)
 			If adventurecurrentarchive=0
 				CreateDir GlobalDirName$+"\Adventures\Editing\Archive\"+ex$
-				dirfile=ReadDir(GlobalDirName$+"\Custom Content\Editing\Current\"+ex$)
+				dirfile=ReadDir(GlobalDirName$+"\Adventures\Editing\Current\"+ex$)
 				Repeat
 					ex2$=NextFile$(dirfile)
 					If ex2$<>"" And ex2$<>"." And ex2$<>".."
-						CopyFile GlobalDirName$+"\Adventures\Editing\Current\"+ex$+"\"+ex2$,GlobalDirName$+"\Custom Content\Editing\Archive\"+ex$+"\"+ex2$
+						CopyFile GlobalDirName$+"\Adventures\Editing\Current\"+ex$+"\"+ex2$,GlobalDirName$+"\Adventures\Editing\Archive\"+ex$+"\"+ex2$
 						DeleteFile GlobalDirName$+"\Adventures\Editing\Current\"+ex$+"\"+ex2$
 					EndIf
 				Until ex2$=""
@@ -10605,7 +10440,7 @@ Function AdventureSelectScreen2()
 				Repeat
 					ex2$=NextFile$(dirfile)
 					If ex2$<>"" And ex2$<>"." And ex2$<>".."
-						CopyFile GlobalDirName$+"\Adventures\Editing\Archive\"+ex$+"\"+ex2$,GlobalDirName$+"\Custom Content\Editing\Current\"+ex$+"\"+ex2$
+						CopyFile GlobalDirName$+"\Adventures\Editing\Archive\"+ex$+"\"+ex2$,GlobalDirName$+"\Adventures\Editing\Current\"+ex$+"\"+ex2$
 						DeleteFile GlobalDirName$+"\Adventures\Editing\Archive\"+ex$+"\"+ex2$
 					EndIf
 				Until ex2$=""
@@ -10633,10 +10468,6 @@ Function AdventureSelectScreen2()
 	RenderLetters()
 	UpdateWorld 
 	RenderWorld
-	
-	If displayfullscreen=True
-				DrawImage mouseimg,MouseX(),MouseY()
-			EndIf
 	Flip
 	If waitflag=True Delay 2000
 
@@ -10718,10 +10549,6 @@ Function AdventureSelectScreen3()
 	RenderLetters()
 	UpdateWorld 
 	RenderWorld
-	
-	If displayfullscreen=True
-				DrawImage mouseimg,MouseX(),MouseY()
-			EndIf
 	Flip
 	If waitflag=True Delay 2000
 
@@ -11573,10 +11400,6 @@ Function MasterMainLoop()
 	
 	RenderLetters()
 	RenderWorld()
-	
-	If displayfullscreen=True
-				DrawImage mouseimg,MouseX(),MouseY()
-			EndIf
 	Flip
 	
 	If waitflag=True Delay 1000
@@ -11612,7 +11435,7 @@ Function LoadMasterFile()
 	If CustomIconName$="" Or CustomIconName$="Standard"
 		CustomIconName$="Standard"
 	Else
-		If FileType(globaldirname$+"\Custom Content\icons\icons "+CustomIconName$+".bmp")<>1
+		If FileType(globaldirname$+"\custom content\icons\icons "+CustomIconName$+".bmp")<>1
 			Cls
 			Print "Error: Custom Icon File '"+customiconname$+"' not found."
 			Print "Reverting to 'Standard' Custom Icon Texture."
@@ -12654,11 +12477,6 @@ Function DialogMainLoop()
 	
 	RenderLetters()
 	RenderWorld()
-	
-
-	If displayfullscreen=True
-				DrawImage mouseimg,MouseX(),MouseY()
-			EndIf
 	Flip
 	
 	
@@ -12958,15 +12776,18 @@ End Function
 
 
 Include "particles.bb"
-		
+
 
 .winning
 Data "None (e.g. collect star)","Rescue All Stinkers","Capture/Destroy Scritters","Collect All Gems","Destroy All Bricks","Destroy FireFlowers","Race","Capture/Destroy Crabs","Rescue All BabyBoomers","Destroy All ZBots"
 Data "Done"
-
+	
 .Commands
 Data "CWHI","CGRY","CRED","CORA","CYEL","CGRE","CCYA","CBLU","CPUR","CRAI","CBLI","CWAR"
-Data "ENON","ESHI","EJIT","EWAV","EBOU","EZOO","EZSH","ECIR","EEIG","EUPD","ELER","EROT"
+Data "ENON","ESHI","EJIT","EWAV","EBOU","EZOO","EZSH","ECIR","EEIG","EUPD","ELER","EROT"	
+
+
+
 
 
 
