@@ -13,7 +13,7 @@
 
 Include "particles-define.bb"
 
-Global VersionText$="WA MOFI Editor (BetterEditor Mod v1.02)"
+Global VersionText$="WA MOFI Editor (BetterEditor Mod v1.03)"
 
 Global MASTERUSER=True
 
@@ -1731,6 +1731,8 @@ Function EditorControls()
 				Case 2
 					CurrentTileLogic=5
 				Case 5
+					CurrentTileLogic=6
+				Case 6
 					CurrentTileLogic=11
 				Case 11
 					CurrentTileLogic=12
@@ -1753,8 +1755,10 @@ Function EditorControls()
 					CurrentTileLogic=1
 				Case 5
 					CurrentTileLogic=2
-				Case 11
+				Case 6
 					CurrentTileLogic=5
+				Case 11
+					CurrentTileLogic=6
 				Case 12
 					CurrentTileLogic=11
 				Case 13
@@ -1981,7 +1985,8 @@ Function EditorControls()
 		Text 719,115,"  Retro  "
 	Case 12
 		Text 719,115,"  Cave  "
-
+	Default
+		Text 719-5,115,"Custom:" + LevelMusic
 
 
 
@@ -2016,22 +2021,21 @@ Function EditorControls()
 		If my>=100 And my<115 And leftmouse=True And leftmousereleased=True
 			leftmousereleased=False
 			LevelWeather=LevelWeather+1
-			If levelweather=18 Then levelweather=0
+			If levelweather=8 Then levelweather=0
 		EndIf
 		If my>=100 And my<115 And rightmouse=True And rightmousereleased=True
 			rightmousereleased=False
 			LevelWeather=LevelWeather-1
-			If levelweather=-1 Then levelweather=17
+			If levelweather=-1 Then levelweather=7
 		EndIf
 		If my>=115 And my<130 And leftmouse=True And leftmousereleased=True
 			leftmousereleased=False
-			levelmusic=levelmusic+1
-			If levelmusic=13 Then levelmusic=-1
+			If Fast levelmusic=levelmusic+100 Else levelmusic=levelmusic+1
 		EndIf
 		If my>=115 And my<130 And rightmouse=True And rightmousereleased=True
 			rightmousereleased=False
-			levelmusic=levelmusic-1
-			If levelmusic=-2 Then levelmusic=12
+			If Fast levelmusic=levelmusic-100 Else levelmusic=levelmusic-1
+			If levelmusic=-2 Then levelmusic=-1
 		EndIf
 
 
@@ -4319,7 +4323,8 @@ Function DisplayObjectAdjuster(i)
 				tex$="Glyph"
 			Else If CurrentObjectSubType=-6
 				tex$="MapPiece"
-
+			Else If CurrentObjectSubType=-99
+				tex$="Whistle"
 			EndIf
 			
 
@@ -5833,10 +5838,14 @@ Function AdjustObjectAdjuster(i)
 		If RightMouse=True Then CurrentObjectSubType=CurrentObjectSubType-1
 		
 		If CurrentObjectModelName$="!CustomItem"
-			If CurrentObjectSubType<-6
+			If CurrentObjectSubType=-7
+				CurrentObjectSubType=-99
+			Else If CurrentObjectSubType=-100
 				CurrentObjectSubType=27
+			Else If CurrentObjectSubType=-98
+				CurrentObjectSubType=-6
 			Else If CurrentObjectSubType=28
-				CurrentObjectSubType=-4
+				CurrentObjectSubType=-99
 			Else If CurrentObjectSubType=8
 				CurrentObjectSubType=10
 			Else If CurrentObjectSubType=9
@@ -5942,25 +5951,20 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(0)=CurrentObjectData(0)+Adj
 		If RightMouse=True Then CurrentObjectData(0)=CurrentObjectData(0)-Adj
 		
-		If CurrentObjectModelName$="!Scritter" Or CurrentObjectModelName$="!Cuboid" Or CurrentObjectType=424
+		If CurrentObjectModelName$="!Cuboid" Or CurrentObjectType=424
 			; colours 0-6
 			If CurrentObjectData(0)>6 CurrentObjectData(0)=0
 			If CurrentObjectData(0)<0 CurrentObjectData(0)=6
 		Else If CurrentObjectTextureName$="!GloveTex" 
-			If currentobjectdata(0)<-1 Then currentobjectdata(0)=6
-			If currentobjectdata(0)>=7 Then currentobjectdata(0)=0
-	
-		Else If CurrentObjectModelName$="!Obstacle51" Or CurrentObjectModelName$="!Obstacle55" Or CurrentObjectModelName$="!Obstacle59"
-			If CurrentObjectData(0)>3 CurrentObjectData(0)=0
-			If CurrentObjectData(0)<0 CurrentObjectData(0)=3
-
-	
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(0)<=-32768 Then CurrentObjectData(0)=32767
+			If CurrentObjectData(0)>=32767 Then CurrentObjectData(0)=-32768
 
 		Else If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)<10 Or (CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!ColourGate"
 
-			; colours 0-15
-			If CurrentObjectData(0)>15 CurrentObjectData(0)=0
-			If CurrentObjectData(0)<0 CurrentObjectData(0)=15
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(0)<=-32768 Then CurrentObjectData(0)=32767
+			If CurrentObjectData(0)>=32767 Then CurrentObjectData(0)=-32768
 
 		Else If CurrentObjectModelName$="!Teleport" 
 			; colours 0-8
@@ -6068,14 +6072,14 @@ Function AdjustObjectAdjuster(i)
 		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter"  Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!Retrolasergate"
 
 
-			; subcolours 0-4
-			If CurrentObjectData(1)>4 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(1)<=-32768 Then CurrentObjectData(1)=32767
+			If CurrentObjectData(1)>=32767 Then CurrentObjectData(1)=-32768
 		Else If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<10) 
 
-			; colours 0-15
-			If CurrentObjectData(1)>15 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=15
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(1)<=-32768 Then CurrentObjectData(1)=32767
+			If CurrentObjectData(1)>=32767 Then CurrentObjectData(1)=-32768
 		EndIf
 	
 		
@@ -6097,8 +6101,8 @@ Function AdjustObjectAdjuster(i)
 		EndIf
 
 		If CurrentObjectModelName$="!Gem"
-			If CurrentObjectData(1)>6 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=6
+			If CurrentObjectData(1)>7 CurrentObjectData(1)=0
+			If CurrentObjectData(1)<0 CurrentObjectData(1)=7
 
 		EndIf
 		If CurrentObjectModelName$="!Bowler"
@@ -6168,14 +6172,14 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(2)<0 CurrentObjectData(2)=7
 		EndIf
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; colours 0-15
-			If CurrentObjectData(2)>15 CurrentObjectData(2)=0
-			If CurrentObjectData(2)<0 CurrentObjectData(2)=15
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(2)<=-32768 Then CurrentObjectData(2)=32767
+			If CurrentObjectData(2)>=32767 Then CurrentObjectData(2)=-32768
 		EndIf
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)>=5 And (CurrentObjectSubType Mod 32)<10)
-			; subcolours 0-4
-			If CurrentObjectData(2)>4 CurrentObjectData(2)=0
-			If CurrentObjectData(2)<0 CurrentObjectData(2)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(2)<=-32768 Then CurrentObjectData(2)=32767
+			If CurrentObjectData(2)>=32767 Then CurrentObjectData(2)=-32768
 		EndIf
 		If  (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17))
 			; direction 0-1
@@ -6204,8 +6208,8 @@ Function AdjustObjectAdjuster(i)
 		EndIf
 		
 		If  CurrentObjectModelName$="!ColourGate"
-			If CurrentObjectData(2)>2 CurrentObjectData(2)=0
-			If CurrentObjectData(2)<0 CurrentObjectData(2)=2
+			If CurrentObjectData(2)>3 CurrentObjectData(2)=0
+			If CurrentObjectData(2)<0 CurrentObjectData(2)=3
 		EndIf
 		
 		If CurrentObjectModelName$="!Gem"
@@ -6260,14 +6264,14 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(3)<0 CurrentObjectData(3)=2
 		EndIf
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; colours 0-15
-			If CurrentObjectData(3)>15 CurrentObjectData(3)=0
-			If CurrentObjectData(3)<0 CurrentObjectData(3)=15
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(3)<=-32768 Then CurrentObjectData(3)=32767
+			If CurrentObjectData(3)>=32767 Then CurrentObjectData(3)=-32768
 		EndIf
 		If (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)>=5 And (CurrentObjectSubType Mod 32)<10)
-			; subcolour 0-4
-			If CurrentObjectData(3)>4 CurrentObjectData(3)=0
-			If CurrentObjectData(3)<0 CurrentObjectData(3)=4
+			; subcolour [2^16-1; 2^16-1)
+			If CurrentObjectData(3)<=-32768 Then CurrentObjectData(3)=32767
+			If CurrentObjectData(3)>=32767 Then CurrentObjectData(3)=-32768
 		EndIf
 		If  CurrentObjectModelName$="!Button" And CurrentObjectSubType=11 And CurrentObjectData(0)=0
 			; y goal
@@ -6347,9 +6351,9 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(4)=CurrentObjectData(4)+Adj
 		If RightMouse=True Then CurrentObjectData(4)=CurrentObjectData(4)-Adj
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; subcolours 0-4
-			If CurrentObjectData(4)>4 CurrentObjectData(4)=0
-			If CurrentObjectData(4)<0 CurrentObjectData(4)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(4)<=-32768 Then CurrentObjectData(4)=32767
+			If CurrentObjectData(4)>=32767 Then CurrentObjectData(4)=-32768
 		EndIf
 		If  CurrentObjectModelName$="!Button" And CurrentObjectSubType=10
 			;playerstartingyaw
@@ -6398,9 +6402,9 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(5)=CurrentObjectData(5)+Adj
 		If RightMouse=True Then CurrentObjectData(5)=CurrentObjectData(5)-Adj
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; subcolours 0-4
-			If CurrentObjectData(5)>4 CurrentObjectData(5)=0
-			If CurrentObjectData(5)<0 CurrentObjectData(5)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(5)<=-32768 Then CurrentObjectData(5)=32767
+			If CurrentObjectData(5)>=32767 Then CurrentObjectData(5)=-32768
 		Else If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)=15)
 			; repeatable
 			If CurrentObjectData(5)>1 CurrentObjectData(5)=0
@@ -6443,9 +6447,9 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(6)=CurrentObjectData(6)+Adj
 		If RightMouse=True Then CurrentObjectData(6)=CurrentObjectData(6)-Adj
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; subcolours 0-4
-			If CurrentObjectData(6)>4 CurrentObjectData(6)=0
-			If CurrentObjectData(6)<0 CurrentObjectData(6)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(6)<=-32768 Then CurrentObjectData(6)=32767
+			If CurrentObjectData(6)>=32767 Then CurrentObjectData(6)=-32768
 		EndIf
 		If  CurrentObjectModelName$="!Button" And CurrentObjectSubType=11 And CurrentObjectData(0)=0
 			; timer reset
@@ -6490,9 +6494,9 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(7)=CurrentObjectData(7)+Adj
 		If RightMouse=True Then CurrentObjectData(7)=CurrentObjectData(7)-Adj
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; subcolours 0-4
-			If CurrentObjectData(7)>4 CurrentObjectData(7)=0
-			If CurrentObjectData(7)<0 CurrentObjectData(7)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(7)<=-32768 Then CurrentObjectData(7)=32767
+			If CurrentObjectData(7)>=32767 Then CurrentObjectData(7)=-32768
 		EndIf
 		If  CurrentObjectModelName$="!Button" And CurrentObjectSubType=11 And CurrentObjectData(0)=1
 			; turn
@@ -7196,9 +7200,9 @@ Function BuildCurrentObjectModel()
 		CurrentObjectModel=CopyEntity(CoinMesh)
 		EntityTexture CurrentObjectModel,TokenCoinTexture
 	Else If CurrentObjectModelName$="!Gem"
-		If currentobjectdata(0)<0 Or currentobjectdata(0)>2 Then currentobjectdata(0)=0
+		If CurrentObjectData(0)<0 Or CurrentObjectData(0)>2 Then CurrentObjectData(0)=0
 		CurrentObjectModel=CopyEntity(GemMesh(CurrentObjectData(0)))
-		If currentobjectdata(1)<0 Or currentobjectdata(1)>7 Then currentobjectdata(1)=0
+		If CurrentObjectData(1)<0 Or CurrentObjectData(1)>7 Then CurrentObjectData(1)=0
 		EntityTexture CurrentObjectModel,TeleporterTexture(CurrentObjectData(1))
 
 	Else If CurrentObjectModelName$="!Sign"
@@ -8550,12 +8554,6 @@ Function LoadLevel(levelnumber)
 		Else If ObjectModelName$(Dest)="!Obstacle10"
 			ObjectEntity(Dest)=CopyEntity(  ObstacleMesh(10)  )
 			EntityTexture ObjectEntity(Dest), MushroomTex
-		
-		Else If ObjectModelName$(Dest)="!Obstacle51" Or ObjectModelName$(Dest)="!Obstacle55" Or ObjectModelName$(Dest)="!Obstacle59"
-			ObjectEntity(Dest)=CopyEntity(  ObstacleMesh((Asc(Mid$(ObjectModelName$(Dest),10,1))-48)*10+(Asc(Mid$(ObjectModelName$(Dest),11,1))-48)+ObjectData(Dest,0))  )
-			EntityTexture ObjectEntity(Dest), ObstacleTexture((Asc(Mid$(ObjectModelName$(Dest),10,1))-48)*10+(Asc(Mid$(ObjectModelName$(Dest),11,1))-48)+ObjectData(Dest,1))
-
-
 
 		Else If Left$(ObjectModelName$(Dest),9)="!Obstacle"
 			ObjectEntity(Dest)=CopyEntity(ObstacleMesh((Asc(Mid$(ObjectModelName$(Dest),10,1))-48)*10+(Asc(Mid$(ObjectModelName$(Dest),11,1))-48)))
@@ -12510,7 +12508,7 @@ Include "particles.bb"
 
 
 .winning
-Data "None (e.g. collect star)","Rescue All Stinkers","Capture/Destroy Scritters","Collect All Gems","Destroy All Bricks","Destroy FireFlowers","Race","Capture/Destroy Crabs","Rescue All BabyBoomers","Destroy All ZBots"
+Data "None (e.g. collect star)","Rescue All Stinkers","Capture/Destroy Scritters","Collect All Gems","Destroy All Bricks","Destroy FireFlowers","Race","Capture/Destroy Crabs","Rescue All BabyBoomers"
 Data "Done"
 	
 .Commands
