@@ -13,9 +13,9 @@
 
 Include "particles-define.bb"
 
-Global VersionText$="MOFI Editor V1.01 BETA"
+Global VersionText$="WA 0.96 Editor (BetterEditor Mod v1.03)"
 
-Global MASTERUSER=True
+Global MASTERUSER=False
 
 Global LeftMouse,LeftMouseReleased,RightMouse,RightMouseReleased
 Global ReturnKey,ReturnKeyReleased,DeleteKey,DeleteKeyReleased
@@ -26,7 +26,7 @@ Global EditorMode=0		;0-level, 1-textures, 2-sidetextures, 3-objects
 						;8-master edit screen
 						;9-dialog edit screen
 						
-AppTitle "Wonderland Adventures Editor"
+AppTitle "WA 0.96 Editor"
 ; EDITOR DIALOG DATA
 
 Global CurrentDialog
@@ -148,7 +148,7 @@ Global LevelMusic,LevelWeather
 Global Leveltimer
 
 ; Directory Names
-Global GlobalDirName$ = "UserData"; SpecialFolderLocation($1c)+"\Midnight Synergy\WA Editor"
+Global GlobalDirName$ = "User Data"; SpecialFolderLocation($1c)+"\Midnight Synergy\WA Editor"
 CreateDir GlobalDirName$
 CreateDir GlobalDirName$+"\Temp"
 CreateDir GlobalDirName$+"\Adventures\Editing"
@@ -549,9 +549,9 @@ PositionEntity CurrentObjectMarkerMesh,0,300,0
 
 ; Load Textures
 ; =================
-LevelTexture=MyLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+LevelTexture=MyLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 EntityTexture TexturePlane,LevelTexture
-WaterTexture=MyLoadTexture("data\Leveltextures\"+WaterTExturename$(currentwatertexture),2)
+WaterTexture=MyLoadTexture("data\LevelTextures\"+WaterTExturename$(currentwatertexture),2)
 Global ButtonTexture=MyLoadTexture("data\graphics\buttons1.bmp",4)
 Global GateTexture=MyLoadTexture("data\graphics\gates.bmp",1)
 
@@ -608,9 +608,7 @@ HideEntity SteppingStoneMesh
 
 ; WaterFall
 Dim WaterFallTexture(2)
-WaterFallTexture(0)=MyLoadTexture("data\Leveltextures\waterfall.jpg",1)
-WaterFallTexture(1)=MyLoadTexture("data\Leveltextures\waterfalllava.jpg",1)
-WaterFallTexture(2)=MyLoadTexture("data\Leveltextures\waterfallgreen.jpg",1)
+WaterFallTexture(0)=MyLoadTexture("data\LevelTextures\waterfall.jpg",1)
 Global WaterFallMesh;
 
 ; Star
@@ -741,61 +739,6 @@ For i=0 To 7
 Next
 EntityTexture ThwartMesh,ThwartTexture(0)
 HideEntity ThwartMesh
-
-; Tentacle
-Global TentacleMesh=myLoadMesh("data\models\trees\tentacle.b3d",0)
-Global TentacleTexture = myLoadTexture ("data\models\trees\tentacle.jpg",1)
-
-EntityTexture tentaclemesh,tentacletexture
-HideEntity TentacleMesh
-
-; Crabs
-Global CrabMesh=myLoadMD2("data\models\crab\crab.md2")
-Global CrabTexture1=myLoadTexture("data\models\crab\crab03a.jpg",1)
-Global CrabTexture2=myLoadTexture("data\models\crab\crab03b.jpg",1)
-EntityTexture CrabMesh,CrabTexture1
-HideEntity CrabMesh
-
-; Ice Troll
-Global TrollMesh=myLoadMD2("data\models\thwart\ice troll.md2")
-Global TrollTexture=myLoadTexture("data\models\thwart\icetroll01.bmp",1)
-EntityTexture TrollMesh,TrollTexture
-HideEntity TrollMesh
-
-; Kaboom
-Global KaboomMesh=myLoadMD2("data\models\kaboom\kaboom.md2")
-Global KaboomTexture=myLoadTexture("data\models\kaboom\kaboom01.jpg",1)
-EntityTexture KaboomMesh,KaboomTexture
-HideEntity KaboomMesh
-
-; Retrostuff
-Global RetroBoxMesh=myLoadMesh("data\models\retro\box.3ds",0)
-Global RetroBoxTexture=myLoadTexture("data\models\retro\woodbox.bmp",1)
-EntityTexture Retroboxmesh,retroboxtexture
-HideEntity RetroBoxMesh
-Global RetroCoilyMesh=myLoadMD2("data\models\retro\coily.md2")
-Global RetroCoilyTexture=myLoadTexture("data\models\retro\coily.bmp",1)
-EntityTexture Retrocoilymesh,retrocoilytexture
-HideEntity RetroCoilyMesh
-Global RetroScougeMesh=myLoadMesh("data\models\retro\scouge.3ds",0)
-Global RetroScougeTexture=myLoadTexture("data\models\retro\scouge3.bmp",1)
-EntityTexture Retroscougemesh,retroscougetexture
-RotateMesh RetroScougeMesh,-90,0,0
-RotateMesh RetroScougeMesh,0,-90,0
-HideEntity RetroScougeMesh
-Global RetroUfoMesh=myLoadMesh("data\models\retro\ufo.3ds",0)
-Global RetroUfoTexture=myLoadTexture("data\models\retro\ufo.bmp",1)
-EntityTexture retroufomesh,retroufotexture
-RotateMesh RetroUFOMesh,-90,0,0
-RotateMesh RetroUFOMesh,0,-90,0
-HideEntity RetroUFOMesh
-Global RetroZbotMesh=myLoadMesh("data\models\retro\zbot.3ds",0)
-Global RetroZbotTexture=myLoadTexture("data\models\retro\zbot.bmp",1)
-EntityTexture retrozbotmesh,retrozbottexture
-RotateMesh RetrozbotMesh,-90,0,0
-RotateMesh RetrozbotMesh,0,90,0
-HideEntity RetrozbotMesh
-Global RetroRainbowCoinTexture=myLoadTexture("data\models\retro\rainbowcoin.bmp",1)
 
 ; Obstacles
 Dim ObstacleMesh(100),ObstacleTexture(100)
@@ -1731,6 +1674,8 @@ Function EditorControls()
 				Case 2
 					CurrentTileLogic=5
 				Case 5
+					CurrentTileLogic=6
+				Case 6
 					CurrentTileLogic=11
 				Case 11
 					CurrentTileLogic=12
@@ -1753,8 +1698,10 @@ Function EditorControls()
 					CurrentTileLogic=1
 				Case 5
 					CurrentTileLogic=2
-				Case 11
+				Case 6
 					CurrentTileLogic=5
+				Case 11
+					CurrentTileLogic=6
 				Case 12
 					CurrentTileLogic=11
 				Case 13
@@ -1969,19 +1916,8 @@ Function EditorControls()
 		Text 715,115,"Cave/Woods"
 	Case 6
 		Text 715,115,"Scary/Void"
-	Case 7
-		Text 715,115,"WondrFalls"
-	Case 8
-		Text 715,115,"  Jungle  "
-	Case 9
-		Text 715,115,"KaboomTown"
-	Case 10
-		Text 715,115,"Acid Pools"
-	Case 11
-		Text 719,115,"  Retro  "
-	Case 12
-		Text 719,115,"  Cave  "
-
+	Default
+		Text 719-5,115,"Custom:" + LevelMusic
 
 
 
@@ -2016,22 +1952,21 @@ Function EditorControls()
 		If my>=100 And my<115 And leftmouse=True And leftmousereleased=True
 			leftmousereleased=False
 			LevelWeather=LevelWeather+1
-			If levelweather=18 Then levelweather=0
+			If levelweather=8 Then levelweather=0
 		EndIf
 		If my>=100 And my<115 And rightmouse=True And rightmousereleased=True
 			rightmousereleased=False
 			LevelWeather=LevelWeather-1
-			If levelweather=-1 Then levelweather=17
+			If levelweather=-1 Then levelweather=7
 		EndIf
 		If my>=115 And my<130 And leftmouse=True And leftmousereleased=True
 			leftmousereleased=False
-			levelmusic=levelmusic+1
-			If levelmusic=13 Then levelmusic=-1
+			If Fast levelmusic=levelmusic+100 Else levelmusic=levelmusic+1
 		EndIf
 		If my>=115 And my<130 And rightmouse=True And rightmousereleased=True
 			rightmousereleased=False
-			levelmusic=levelmusic-1
-			If levelmusic=-2 Then levelmusic=12
+			If Fast levelmusic=levelmusic-100 Else levelmusic=levelmusic-1
+			If levelmusic=-2 Then levelmusic=-1
 		EndIf
 
 
@@ -2040,7 +1975,7 @@ Function EditorControls()
 			CurrentLevelTexture=CurrentLevelTexture+1
 			If CurrentLevelTexture=NofLevelTextures Then currentleveltexture=0
 			FreeTexture LevelTexture
-			LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+			LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 			EntityTexture TexturePlane,LevelTexture
 			For j=0 To LevelHeight-1
 				EntityTexture LevelMesh(j),LevelTexture
@@ -2052,7 +1987,7 @@ Function EditorControls()
 			CurrentLevelTexture=CurrentLevelTexture-1
 			If CurrentLevelTexture=-1 Then currentleveltexture=NofLevelTextures-1
 			FreeTexture LevelTexture
-			LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+			LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 			EntityTexture TexturePlane,LevelTexture
 			For j=0 To LevelHeight-1
 				EntityTexture LevelMesh(j),LevelTexture
@@ -2066,7 +2001,7 @@ Function EditorControls()
 			
 			If CurrentWaterTexture=NofWaterTextures Then currentWatertexture=0
 			FreeTexture WaterTexture
-			waterTexture=myLoadTexture("data\Leveltextures\"+waterTexturename$(CurrentWaterTexture),2)
+			waterTexture=myLoadTexture("data\LevelTextures\"+waterTexturename$(CurrentWaterTexture),2)
 			EntityTexture Currentwatertile,WaterTexture
 			For j=0 To LevelHeight-1
 				EntityTexture WaterMesh(j),WaterTexture
@@ -2080,7 +2015,7 @@ Function EditorControls()
 			
 			If CurrentWaterTexture=-1 Then currentWatertexture=NofWaterTextures-1
 			FreeTexture WaterTexture
-			waterTexture=myLoadTexture("data\Leveltextures\"+waterTexturename$(CurrentWaterTexture),2)
+			waterTexture=myLoadTexture("data\LevelTextures\"+waterTexturename$(CurrentWaterTexture),2)
 			EntityTexture Currentwatertile,WaterTexture
 			For j=0 To LevelHeight-1
 				EntityTexture WaterMesh(j),WaterTexture
@@ -2098,7 +2033,7 @@ Function EditorControls()
 			Color 255,255,255
 			LevelTextureCustomName$=Input$( "Custom Texture Name (e.g. 'customtemplate'):")
 			
-			If FileType (globaldirname$+"\Custom Content\Textures\leveltex "+leveltexturecustomname$+".bmp")<>1 And FileType (globaldirname$+"\custom content\textures\backgroundtex "+leveltexturecustomname$+"1.bmp")<>1 And FileType (globaldirname$+"\custom content\textures\backgroundtex "+leveltexturecustomname$+"2.bmp")<>1
+			If FileType (globaldirname$+"\Custom Content\Textures\leveltex "+leveltexturecustomname$+".bmp")<>1 And FileType (globaldirname$+"\Custom Content\Textures\backgroundtex "+leveltexturecustomname$+"1.bmp")<>1 And FileType (globaldirname$+"\Custom Content\Textures\backgroundtex "+leveltexturecustomname$+"2.bmp")<>1
 				Locate 0,0
 				Color 0,0,0
 				Rect 0,0,500,40,True
@@ -2116,7 +2051,7 @@ Function EditorControls()
 					Rect 0,0,500,40,True
 					Color 255,255,0
 					Print "TEXTURE COULDN'T LOAD!"
-					LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+					LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 					
 
 					Delay 2000
@@ -2158,7 +2093,7 @@ Function EditorControls()
 					Rect 0,0,500,40,True
 					Color 255,255,0
 					Print "TEXTURE COULDN'T LOAD!"
-					WaterTexture=myLoadTexture("data\Leveltextures\"+WaterTexturename$(CurrentWaterTexture),2)
+					WaterTexture=myLoadTexture("data\LevelTextures\"+WaterTexturename$(CurrentWaterTexture),2)
 					
 
 					Delay 2000
@@ -4319,7 +4254,8 @@ Function DisplayObjectAdjuster(i)
 				tex$="Glyph"
 			Else If CurrentObjectSubType=-6
 				tex$="MapPiece"
-
+			Else If CurrentObjectSubType=-99
+				tex$="Whistle"
 			EndIf
 			
 
@@ -4338,15 +4274,6 @@ Function DisplayObjectAdjuster(i)
 				tex$="ClockW"
 			Else If CurrentObjectSubType=3
 				tex$="CountW"
-			EndIf
-		EndIf
-		If CurrentObjectModelName$="!Crab"
-			tex2$="Type"
-			If CurrentObjectSubType=0
-				tex$="Green"
-			Else If CurrentObjectSubType=1
-				tex$="Red"
-			
 			EndIf
 		EndIf
 
@@ -4410,7 +4337,7 @@ Function DisplayObjectAdjuster(i)
 	Case "Data0"
 		tex$=Str$(CurrentObjectData(0))
 		
-		If CurrentObjectModelName$="!Scritter" Or CurrentObjectModelName$="!Cuboid" Or CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectTextureName$="!GloveTex"  Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage"  Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectType=424
+		If CurrentObjectModelName$="!Scritter" Or CurrentObjectModelName$="!Cuboid" Or CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectTextureName$="!GloveTex"  Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage"  Or CurrentObjectTextureName$="!FireTrap"
 			tex2$="Colour"
 		EndIf
 		
@@ -4538,7 +4465,7 @@ Function DisplayObjectAdjuster(i)
 				tex$="NorthWest"
 			End Select
 		EndIf
-		If CurrentObjectModelName$="!Turtle" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectType<>424)
+		If CurrentObjectModelName$="!Turtle"
 			tex2$="Direction"
 			
 			Select CurrentObjectData(0)
@@ -4574,24 +4501,6 @@ Function DisplayObjectAdjuster(i)
 				tex$="Green"
 			Case 8
 				tex$="White"
-			End Select
-				
-			
-		EndIf
-		If CurrentObjectModelName$="!Kaboom"
-			tex2$="Texture"
-			
-			Select CurrentObjectData(0)
-			Case 1
-				tex$="Blue"
-			Case 2
-				tex$="Purple"
-			Case 3
-				tex$="Red"
-			Case 4
-				tex$="Gold"
-			Case 5
-				tex$="Dark"
 			End Select
 				
 			
@@ -4636,7 +4545,7 @@ Function DisplayObjectAdjuster(i)
 
 	Case "Data1"
 		tex$=Str$(CurrentObjectData(1))
-		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!Retrolasergate"
+		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap"
 			tex2$="SubColour"
 		EndIf
 		
@@ -4729,21 +4638,6 @@ Function DisplayObjectAdjuster(i)
 			
 			EndIf
 		EndIf
-		
-		If CurrentObjectModelName$="!Crab"
-			tex2$="Status"
-			If CurrentObjectData(1)=0
-				tex$="Awake"
-			Else If CurrentObjectData(1)=1
-				tex$="Curious"
-			Else If CurrentObjectData(1)=2
-				tex$="Asleep"
-			Else If CurrentObjectData(1)=3
-				tex$="Disabled"
-
-			
-			EndIf
-		EndIf
 
 
 
@@ -4768,7 +4662,7 @@ Function DisplayObjectAdjuster(i)
 		
 	
 
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll"
+		If CurrentObjectModelName$="!Thwart"
 			tex2$="Anim"
 			If CurrentObjectData(1)=0
 				tex$="Normal"
@@ -4787,24 +4681,13 @@ Function DisplayObjectAdjuster(i)
 		If CurrentObjectType=51 ; spellball generator
 			tex2$="Goal X"
 		EndIf
-
-		If  (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectModelName$<>"!Retrolasergate")
-
-			tex2$="Turning"
-			If CurrentObjectData(1)=0
-				tex$="Left"
-			Else If CurrentObjectData(1)=1
-				tex$="Right"
-			
-			EndIf
-		EndIf
 		
 
 
 		
 	Case "Data2" 
 		tex$=Str$(CurrentObjectData(2))
-		If CurrentObjectModelName$="!Spring"  Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!FlipBridge"
+		If CurrentObjectModelName$="!Spring"  Or CurrentObjectModelName$="!Transporter"
 
 			tex2$="Direction"
 			If CurrentObjectModelName$="!Transporter" Then tex$=Str$(3-CurrentObjectData(2))
@@ -5468,7 +5351,7 @@ Function DisplayObjectAdjuster(i)
 			End Select
 		EndIf
 		
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll"
+		If CurrentObjectModelName$="!Thwart"
 
 			tex2$="Shooter"
 			Select CurrentObjectData(6)
@@ -5508,7 +5391,7 @@ Function DisplayObjectAdjuster(i)
 				
 			EndIf
 		EndIf
-		If CurrentObjectModelName$="!NPC" Or CurrentObjectModelName$="!Kaboom"
+		If CurrentObjectModelName$="!NPC"
 		
 			tex2$="Turn"
 			If (CurrentObjectData(7) Mod 10)=0 tex$="Fixed"
@@ -5521,7 +5404,7 @@ Function DisplayObjectAdjuster(i)
 			If CurrentObjectData(7) >=20 And CurrentObjectData(7)<30 tex$=tex$+"BouFas"
 		EndIf
 		
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll"
+		If CurrentObjectModelName$="!Thwart"
 
 			tex2$="TimerMax1"
 		EndIf
@@ -5556,30 +5439,6 @@ Function DisplayObjectAdjuster(i)
 			If CurrentObjectData(8)=8 tex$="Sit/Stand/Wave"
 			If CurrentObjectData(8)=9 tex$="Panic Sometime"
 			If CurrentObjectData(8)=10 tex$="Panic Constant"
-			
-			
-		EndIf
-		
-		If CurrentObjectModelName$="!Kaboom"
-			
-			tex2$="Anim"
-			If CurrentObjectData(8)=0 tex$="Stand"
-			If CurrentObjectData(8)=1 tex$="Sit"
-			If CurrentObjectData(8)=2 tex$="Sit/Stand"
-			If CurrentObjectData(8)=3 tex$="Shiver Some"
-			If CurrentObjectData(8)=4 tex$="Shiver Constant"
-			If CurrentObjectData(8)=5 tex$="Exercise"
-	
-			
-			
-		EndIf
-		
-		If CurrentObjectModelName$="!BabyBoomer"
-			
-			tex2$="Boom"
-			If CurrentObjectData(8)=0 tex$="No"
-			If CurrentObjectData(8)=1 tex$="Yes"
-				
 			
 			
 		EndIf
@@ -5833,10 +5692,14 @@ Function AdjustObjectAdjuster(i)
 		If RightMouse=True Then CurrentObjectSubType=CurrentObjectSubType-1
 		
 		If CurrentObjectModelName$="!CustomItem"
-			If CurrentObjectSubType<-6
+			If CurrentObjectSubType=-7
+				CurrentObjectSubType=-99
+			Else If CurrentObjectSubType=-100
 				CurrentObjectSubType=27
+			Else If CurrentObjectSubType=-98
+				CurrentObjectSubType=-6
 			Else If CurrentObjectSubType=28
-				CurrentObjectSubType=-4
+				CurrentObjectSubType=-99
 			Else If CurrentObjectSubType=8
 				CurrentObjectSubType=10
 			Else If CurrentObjectSubType=9
@@ -5851,10 +5714,6 @@ Function AdjustObjectAdjuster(i)
 		If CurrentObjectModelName$="!FireFlower"
 			If CurrentObjectSubType<0 Then CUrrentObjectSubType=3
 			If CurrentObjectSubType>3 Then CurrentObjectSubType=0
-		EndIf
-		If CurrentObjectModelName$="!Crab"
-			If CurrentObjectSubType<0 Then CUrrentObjectSubType=1
-			If CurrentObjectSubType>1 Then CurrentObjectSubType=0
 		EndIf
 
 
@@ -5901,20 +5760,6 @@ Function AdjustObjectAdjuster(i)
 					CurrentObjectActivationType=1
 				EndIf
 			EndIf
-		Else If CurrentObjectModelName$="!Autodoor"
-			If LeftMouse=True Or RightMouse=True
-				If CurrentObjectActivationType=11 
-					CurrentObjectActivationType=17
-				Else If CurrentObjectActivationType=17
-					CurrentObjectActivationType=18
-				Else If CurrentObjectActivationType=18
-					CurrentObjectActivationType=19
-				Else If CurrentObjectActivationType=19
-					CurrentObjectActivationType=20
-				Else
-					CurrentObjectActivationType=11
-				EndIf
-			EndIf
 		Else
 			If LeftMouse=True Then CurrentObjectActivationType=CurrentObjectActivationType+Adj
 			If RightMouse=True  Then CurrentObjectActivationType=CurrentObjectActivationType-Adj
@@ -5956,29 +5801,20 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(0)=CurrentObjectData(0)+Adj
 		If RightMouse=True Then CurrentObjectData(0)=CurrentObjectData(0)-Adj
 		
-		If CurrentObjectModelName$="!Scritter" Or CurrentObjectModelName$="!Cuboid" Or CurrentObjectType=424
+		If CurrentObjectModelName$="!Cuboid"
 			; colours 0-6
 			If CurrentObjectData(0)>6 CurrentObjectData(0)=0
 			If CurrentObjectData(0)<0 CurrentObjectData(0)=6
 		Else If CurrentObjectTextureName$="!GloveTex" 
-			If currentobjectdata(0)<-1 Then currentobjectdata(0)=6
-			If currentobjectdata(0)>=7 Then currentobjectdata(0)=0
-	
-		Else If CurrentObjectModelName$="!Obstacle51" Or CurrentObjectModelName$="!Obstacle55" Or CurrentObjectModelName$="!Obstacle59"
-			If CurrentObjectData(0)>3 CurrentObjectData(0)=0
-			If CurrentObjectData(0)<0 CurrentObjectData(0)=3
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(0)<=-32768 Then CurrentObjectData(0)=32767
+			If CurrentObjectData(0)>=32767 Then CurrentObjectData(0)=-32768
 
-	
+		Else If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)<10 Or (CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!ColourGate"
 
-		Else If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)<10 Or (CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Pushbot" Or CurrentObjectModelName$="!Autodoor" Or CurrentObjectModelName$="!Suctube" Or CurrentObjectModelName$="!Conveyor"
-
-			; colours 0-15
-			If CurrentObjectData(0)>15 CurrentObjectData(0)=0
-			If CurrentObjectData(0)<0 CurrentObjectData(0)=15
-		Else If CurrentObjectModelName$="!KeyCard"
-			; colours 0-7
-			If CurrentObjectData(0)>7 CurrentObjectData(0)=0
-			If CurrentObjectData(0)<0 CurrentObjectData(0)=7
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(0)<=-32768 Then CurrentObjectData(0)=32767
+			If CurrentObjectData(0)>=32767 Then CurrentObjectData(0)=-32768
 
 		Else If CurrentObjectModelName$="!Teleport" 
 			; colours 0-8
@@ -6029,14 +5865,9 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(0)>7 CurrentObjectData(0)=0
 			If CurrentObjectData(0)<0 CurrentObjectData(0)=7
 		EndIf
-		If CurrentObjectModelName$="!Turtle" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectType<>424)
+		If CurrentObjectModelName$="!Turtle"
 			If CurrentObjectData(0)>3 CurrentObjectData(0)=0
 			If CurrentObjectData(0)<0 CurrentObjectData(0)=3
-		EndIf
-		If  CurrentObjectModelName="!Kaboom"
-
-			If CurrentObjectData(0)>5 CurrentObjectData(0)=1
-			If CurrentObjectData(0)<1 CurrentObjectData(0)=5
 		EndIf
 		
 		If CurrentObjectModelName$="!NPC"
@@ -6083,17 +5914,17 @@ Function AdjustObjectAdjuster(i)
 		If Fast Adj=10
 		If LeftMouse=True Then CurrentObjectData(1)=CurrentObjectData(1)+Adj
 		If RightMouse=True Then CurrentObjectData(1)=CurrentObjectData(1)-Adj
-		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter"  Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!Retrolasergate"
+		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter"  Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap"
 
 
-			; subcolours 0-4
-			If CurrentObjectData(1)>4 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(1)<=-32768 Then CurrentObjectData(1)=32767
+			If CurrentObjectData(1)>=32767 Then CurrentObjectData(1)=-32768
 		Else If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<10) 
 
-			; colours 0-15
-			If CurrentObjectData(1)>15 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=15
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(1)<=-32768 Then CurrentObjectData(1)=32767
+			If CurrentObjectData(1)>=32767 Then CurrentObjectData(1)=-32768
 		EndIf
 	
 		
@@ -6115,8 +5946,8 @@ Function AdjustObjectAdjuster(i)
 		EndIf
 
 		If CurrentObjectModelName$="!Gem"
-			If CurrentObjectData(1)>6 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=6
+			If CurrentObjectData(1)>7 CurrentObjectData(1)=0
+			If CurrentObjectData(1)<0 CurrentObjectData(1)=7
 
 		EndIf
 		If CurrentObjectModelName$="!Bowler"
@@ -6139,10 +5970,6 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(1)>1 CurrentObjectData(1)=0
 			If CurrentObjectData(1)<0 CurrentObjectData(1)=1
 		EndIf
-		If CurrentObjectModelName$="!Crab"
-			If CurrentObjectData(1)>3 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=3
-		EndIf
 
 		
 
@@ -6152,7 +5979,7 @@ Function AdjustObjectAdjuster(i)
 			
 
 		EndIf
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectModelName$<>"!Retrolasergate")
+		If CurrentObjectModelName$="!Thwart"
 
 			If CurrentObjectData(1)>1 CurrentObjectData(1)=0
 			If CurrentObjectData(1)<0 CurrentObjectData(1)=1
@@ -6180,20 +6007,20 @@ Function AdjustObjectAdjuster(i)
 
 		If LeftMouse=True Then CurrentObjectData(2)=CurrentObjectData(2)+Adj
 		If RightMouse=True Then CurrentObjectData(2)=CurrentObjectData(2)-Adj
-		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!FlipBridge"
+		If CurrentObjectModelName$="!Spring"
 			; direction 0-7
 			If CurrentObjectData(2)>7 CurrentObjectData(2)=0
 			If CurrentObjectData(2)<0 CurrentObjectData(2)=7
 		EndIf
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; colours 0-15
-			If CurrentObjectData(2)>15 CurrentObjectData(2)=0
-			If CurrentObjectData(2)<0 CurrentObjectData(2)=15
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(2)<=-32768 Then CurrentObjectData(2)=32767
+			If CurrentObjectData(2)>=32767 Then CurrentObjectData(2)=-32768
 		EndIf
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)>=5 And (CurrentObjectSubType Mod 32)<10)
-			; subcolours 0-4
-			If CurrentObjectData(2)>4 CurrentObjectData(2)=0
-			If CurrentObjectData(2)<0 CurrentObjectData(2)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(2)<=-32768 Then CurrentObjectData(2)=32767
+			If CurrentObjectData(2)>=32767 Then CurrentObjectData(2)=-32768
 		EndIf
 		If  (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17))
 			; direction 0-1
@@ -6222,8 +6049,8 @@ Function AdjustObjectAdjuster(i)
 		EndIf
 		
 		If  CurrentObjectModelName$="!ColourGate"
-			If CurrentObjectData(2)>2 CurrentObjectData(2)=0
-			If CurrentObjectData(2)<0 CurrentObjectData(2)=2
+			If CurrentObjectData(2)>3 CurrentObjectData(2)=0
+			If CurrentObjectData(2)<0 CurrentObjectData(2)=3
 		EndIf
 		
 		If CurrentObjectModelName$="!Gem"
@@ -6278,14 +6105,14 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(3)<0 CurrentObjectData(3)=2
 		EndIf
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; colours 0-15
-			If CurrentObjectData(3)>15 CurrentObjectData(3)=0
-			If CurrentObjectData(3)<0 CurrentObjectData(3)=15
+			; colours [2^16-1; 2^16-1)
+			If CurrentObjectData(3)<=-32768 Then CurrentObjectData(3)=32767
+			If CurrentObjectData(3)>=32767 Then CurrentObjectData(3)=-32768
 		EndIf
 		If (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)>=5 And (CurrentObjectSubType Mod 32)<10)
-			; subcolour 0-4
-			If CurrentObjectData(3)>4 CurrentObjectData(3)=0
-			If CurrentObjectData(3)<0 CurrentObjectData(3)=4
+			; subcolour [2^16-1; 2^16-1)
+			If CurrentObjectData(3)<=-32768 Then CurrentObjectData(3)=32767
+			If CurrentObjectData(3)>=32767 Then CurrentObjectData(3)=-32768
 		EndIf
 		If  CurrentObjectModelName$="!Button" And CurrentObjectSubType=11 And CurrentObjectData(0)=0
 			; y goal
@@ -6365,9 +6192,9 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(4)=CurrentObjectData(4)+Adj
 		If RightMouse=True Then CurrentObjectData(4)=CurrentObjectData(4)-Adj
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; subcolours 0-4
-			If CurrentObjectData(4)>4 CurrentObjectData(4)=0
-			If CurrentObjectData(4)<0 CurrentObjectData(4)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(4)<=-32768 Then CurrentObjectData(4)=32767
+			If CurrentObjectData(4)>=32767 Then CurrentObjectData(4)=-32768
 		EndIf
 		If  CurrentObjectModelName$="!Button" And CurrentObjectSubType=10
 			;playerstartingyaw
@@ -6416,9 +6243,9 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(5)=CurrentObjectData(5)+Adj
 		If RightMouse=True Then CurrentObjectData(5)=CurrentObjectData(5)-Adj
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; subcolours 0-4
-			If CurrentObjectData(5)>4 CurrentObjectData(5)=0
-			If CurrentObjectData(5)<0 CurrentObjectData(5)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(5)<=-32768 Then CurrentObjectData(5)=32767
+			If CurrentObjectData(5)>=32767 Then CurrentObjectData(5)=-32768
 		Else If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)=15)
 			; repeatable
 			If CurrentObjectData(5)>1 CurrentObjectData(5)=0
@@ -6461,9 +6288,9 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(6)=CurrentObjectData(6)+Adj
 		If RightMouse=True Then CurrentObjectData(6)=CurrentObjectData(6)-Adj
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; subcolours 0-4
-			If CurrentObjectData(6)>4 CurrentObjectData(6)=0
-			If CurrentObjectData(6)<0 CurrentObjectData(6)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(6)<=-32768 Then CurrentObjectData(6)=32767
+			If CurrentObjectData(6)>=32767 Then CurrentObjectData(6)=-32768
 		EndIf
 		If  CurrentObjectModelName$="!Button" And CurrentObjectSubType=11 And CurrentObjectData(0)=0
 			; timer reset
@@ -6481,7 +6308,7 @@ Function AdjustObjectAdjuster(i)
 			
 
 		EndIf
-		If CurrentObjectModelName$="!Thwart" Or CurrentObjectModelName$="!Troll"
+		If CurrentObjectModelName$="!Thwart"
 			If CurrentObjectData(6)>1 CurrentObjectData(6)=0
 			If CurrentObjectData(6)<0 CurrentObjectData(6)=1
 			
@@ -6508,9 +6335,9 @@ Function AdjustObjectAdjuster(i)
 		If LeftMouse=True Then CurrentObjectData(7)=CurrentObjectData(7)+Adj
 		If RightMouse=True Then CurrentObjectData(7)=CurrentObjectData(7)-Adj
 		If  (CurrentObjectModelName$="!Button" And (CurrentObjectSubType Mod 32)<5)
-			; subcolours 0-4
-			If CurrentObjectData(7)>4 CurrentObjectData(7)=0
-			If CurrentObjectData(7)<0 CurrentObjectData(7)=4
+			; subcolours [2^16-1; 2^16-1)
+			If CurrentObjectData(7)<=-32768 Then CurrentObjectData(7)=32767
+			If CurrentObjectData(7)>=32767 Then CurrentObjectData(7)=-32768
 		EndIf
 		If  CurrentObjectModelName$="!Button" And CurrentObjectSubType=11 And CurrentObjectData(0)=1
 			; turn
@@ -6522,7 +6349,7 @@ Function AdjustObjectAdjuster(i)
 			If CurrentobjectData(7)=19 CurrentObjectData(7)=15
 
 		EndIf
-		If CurrentObjectModelName$="!NPC"  Or CurrentObjectModelName="!Kaboom"
+		If CurrentObjectModelName$="!NPC"
 
 			If CurrentobjectData(7)=-2 CurrentObjectData(7)=25
 			If CurrentobjectData(7)=26 CurrentObjectData(7)=-1
@@ -6562,19 +6389,6 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(8)<0 CurrentObjectData(8)=10
 			
 
-		EndIf
-		
-		If CurrentObjectModelName$="!Kaboom"
-			If CurrentObjectData(8)>5 CurrentObjectData(8)=0
-			If CurrentObjectData(8)<0 CurrentObjectData(8)=5
-			
-
-		EndIf
-
-		If CurrentObjectModelName$="!BabyBoomer"
-
-			If CurrentObjectData(8)>1 CurrentObjectData(8)=0
-			If CurrentObjectData(8)<0 CurrentObjectData(8)=1
 		EndIf
 		
 		If CurrentObjectModelName$="!StinkerWee"
@@ -7074,9 +6888,9 @@ Function BuildCurrentObjectModel()
 		CurrentObjectModel=CopyEntity(StinkerMesh)
 		
 		If CurrentObjectData(0)=5
-			CurrentObjectTexture=MyLoadTexture("Data\leveltextures\waterfall.jpg",1)
+			CurrentObjectTexture=MyLoadTexture("data\LevelTextures\waterfall.jpg",1)
 		Else If CurrentObjectData(0)=6
-			CurrentObjectTexture=MyLoadTexture("Data\leveltextures\waterfalllava.jpg",1)
+			CurrentObjectTexture=MyLoadTexture("data\LevelTextures\waterfalllava.jpg",1)
 
 		Else
 			CurrentObjectTexture=MyLoadTexture("data/models/stinker/body00"+Str$(CurrentObjectData(0))+Chr$(65+CurrentObjectData(1))+".jpg",1)
@@ -7135,18 +6949,6 @@ Function BuildCurrentObjectModel()
 	Else If CurrentObjectModelName$="!Thwart"
 		CurrentObjectModel=CopyEntity(ThwartMesh)
 		EntityTexture CurrentObjectModel,ThwartTexture(CurrentObjectData(2))
-	Else If CurrentObjectModelName$="!Tentacle"
-		CurrentObjectModel=CopyEntity(TentacleMesh)
-
-	Else If CurrentObjectModelName$="!Crab"
-		CurrentObjectModel=CopyEntity(CrabMesh)
-		If CurrentObjectSubType=0 Then EntityTexture CurrentObjectModel,CrabTexture2
-	Else If CurrentObjectModelName$="!Troll"
-		CurrentObjectModel=CopyEntity(TrollMesh)
-	Else If CurrentObjectModelName$="!Kaboom"
-		CurrentObjectModel=CopyEntity(KaboomMesh)
-	Else If CurrentObjectModelName$="!BabyBoomer"
-		CurrentObjectModel=CopyEntity(KaboomMesh)
 
 	Else If CurrentObjectModelName$="!FireFlower"
 		CurrentObjectModel=CopyEntity(FireFlowerMesh)
@@ -7209,14 +7011,13 @@ Function BuildCurrentObjectModel()
 	Else If CurrentObjectModelName$="!Coin"
 		CurrentObjectModel=CopyEntity(CoinMesh)
 		EntityTexture CurrentObjectModel,GoldCoinTexture
-		If CurrentObjectType=425 EntityTexture CurrentObjectModel,Retrorainbowcointexture
 	Else If CurrentObjectModelName$="!Token"
 		CurrentObjectModel=CopyEntity(CoinMesh)
 		EntityTexture CurrentObjectModel,TokenCoinTexture
 	Else If CurrentObjectModelName$="!Gem"
-		If currentobjectdata(0)<0 Or currentobjectdata(0)>2 Then currentobjectdata(0)=0
+		If CurrentObjectData(0)<0 Or CurrentObjectData(0)>2 Then CurrentObjectData(0)=0
 		CurrentObjectModel=CopyEntity(GemMesh(CurrentObjectData(0)))
-		If currentobjectdata(1)<0 Or currentobjectdata(1)>7 Then currentobjectdata(1)=0
+		If CurrentObjectData(1)<0 Or CurrentObjectData(1)>7 Then CurrentObjectData(1)=0
 		EntityTexture CurrentObjectModel,TeleporterTexture(CurrentObjectData(1))
 
 	Else If CurrentObjectModelName$="!Sign"
@@ -7241,11 +7042,6 @@ Function BuildCurrentObjectModel()
 
 
 		EntityTexture CurrentObjectModel,Springtexture
-			
-	Else If CurrentObjectModelName$="!FlipBridge"
-		CurrentObjectModel=CreateCube()
-		ScaleMesh CurrentObjectModel,.35,.1,.5
-		CurrentObjectYawAdjust=(-45*CurrentObjectData(2) +3600) Mod 360
 	
 	Else If CurrentObjectModelName$="!Door"
 		CurrentObjectModel=MyLoadmesh("data\models\houses\door01.3ds",0)
@@ -7262,39 +7058,7 @@ Function BuildCurrentObjectModel()
 		CurrentObjectModel=MyLoadmesh("data\models\houses\fountain01.b3d",0)
 		EntityTexture CurrentObjectModel,FountainTexture
 		
-	Else If CurrentObjectModelName$="!Retrobox"
-		CurrentObjectModel=CopyEntity(RetroBoxMesh)
-		
-	Else If CurrentObjectModelName$="!Retrocoily"
-		CurrentObjectModel=CopyEntity(RetroCoilyMesh)
-		
-	Else If CurrentObjectModelName$="!Retroscouge"
-		CurrentObjectModel=CopyEntity(RetroScougeMesh)
-		CurrentObjectYawAdjust=(-90*CurrentObjectData(0) +3600) Mod 360
-	
-	Else If CurrentObjectModelName$="!Retrozbot"
-		CurrentObjectModel=CopyEntity(RetroZbotMesh)
-		CurrentObjectYawAdjust=(-90*CurrentObjectData(0) +3600) Mod 360
-		
-	Else If CurrentObjectModelName$="!Retroufo"
-		CurrentObjectModel=CopyEntity(RetroUFOMesh)
-		CurrentObjectYawAdjust=(-90*CurrentObjectData(0) +3600) Mod 360
-	
-	Else If CurrentObjectModelName$="!Retrolasergate"
-		CurrentObjectModel=CreateretrolasergateMesh(Currentobjectdata(0))
-
-	Else If CurrentObjectModelName="!FloingOrb"
-		CurrentObjectModel=CreateSphere()
-		ScaleMesh CurrentObjectModel,.3,.3,.3
-		EntityColor CurrentObjectModel,255,0,0
-	
-	Else If CurrentObjectModelName="!MagicMirror"
-		CurrentObjectModel=CreateCube()
-		ScaleMesh CurrentObjectModel,3.49,2.49,.52
-		EntityColor CurrentObjectModel,255,0,0
-		EntityAlpha CurrentObjectModel,.5
-		
-	Else If CurrentObjectModelName$="!None" Or CurrentObjectModelName$="!SkyMachineMap"
+	Else If CurrentObjectModelName$="!None"
 		CurrentObjectModel=CreateSphere()
 		ScaleEntity CurrentObjectModel,.2,.2,.2
     Else
@@ -7383,8 +7147,6 @@ Function BuildCurrentObjectModel()
 		RotateEntity CurrentObjectModel,0,0,0
 		TurnEntity CurrentObjectModel,CurrentObjectPitchAdjust,0,CurrentObjectRollAdjust
 		TurnEntity CurrentObjectModel,0,CurrentObjectYawAdjust,0
-		
-		If CurrentObjectModelName$="!Kaboom" Then TurnEntity CurrentObjectModel,0,90,0
 
 
 	;	PositionEntity CurrentObjectModel,CurrentObjectXAdjust,CurrentObjectZAdjust+CurrentObjectZ,-CurrentObjectYAdjust
@@ -8189,7 +7951,7 @@ Function LoadLevel(levelnumber)
 	FreeTexture watertexture
 	leveltexture=0
 	If currentleveltexture=-1
-		LevelTexture=myLoadTexture(globaldirname$+"\custom content\leveltextures\leveltex "+LevelTextureCustomName$+".bmp",1)
+		LevelTexture=myLoadTexture(globaldirname$+"\Custom Content\Textures\leveltex "+LevelTextureCustomName$+".bmp",1)
 		If leveltexture=0
 			Locate 0,0
 			Color 0,0,0
@@ -8198,16 +7960,16 @@ Function LoadLevel(levelnumber)
 			Print "CUSTOM TEXTURE NOT FOUND... REVERTING."
 			Delay 2000
 			currentleveltexture=1
-			LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+			LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 		EndIf
 	Else
-		LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+		LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 		
 	EndIf
 	
 	watertexture=0
 	If currentwatertexture=-1
-		WaterTexture=myLoadTexture(globaldirname$+"\custom content\textures\watertex "+WaterTextureCustomName$+".jpg",2)
+		WaterTexture=myLoadTexture(globaldirname$+"\Custom Content\Textures\watertex "+WaterTextureCustomName$+".jpg",2)
 		If Watertexture=0
 			Locate 0,0
 			Color 0,0,0
@@ -8216,10 +7978,10 @@ Function LoadLevel(levelnumber)
 			Print "CUSTOM WATERTEXTURE NOT FOUND... REVERTING."
 			Delay 2000
 			currentwatertexture=0
-			WaterTexture=myLoadTexture("data\Leveltextures\"+WaterTexturename$(CurrentWaterTexture),2)
+			WaterTexture=myLoadTexture("data\LevelTextures\"+WaterTexturename$(CurrentWaterTexture),2)
 		EndIf
 	Else
-		waterTexture=myLoadTexture("data\Leveltextures\"+waterTexturename$(CurrentWaterTexture),2)
+		waterTexture=myLoadTexture("data\LevelTextures\"+waterTexturename$(CurrentWaterTexture),2)
 	EndIf
 	
 	EntityTexture TexturePlane,LevelTexture
@@ -8376,9 +8138,9 @@ Function LoadLevel(levelnumber)
 			
 		
 			If ObjectData(Dest,0)=5
-				ObjectTexture(Dest)=MyLoadTexture("Data\leveltextures\waterfall.jpg",1)
+				ObjectTexture(Dest)=MyLoadTexture("data\LevelTextures\waterfall.jpg",1)
 			Else If ObjectData(Dest,0)=6
-				ObjectTexture(Dest)=MyLoadTexture("Data\leveltextures\waterfalllava.jpg",1)
+				ObjectTexture(Dest)=MyLoadTexture("data\LevelTextures\waterfalllava.jpg",1)
 	
 			Else
 				ObjectTexture(Dest)=MyLoadTexture("data/models/stinker/body00"+Str$(ObjectData(Dest,0))+Chr$(65+ObjectData(Dest,1))+".jpg",1)
@@ -8510,8 +8272,6 @@ Function LoadLevel(levelnumber)
 			EndIf
 		Else If ObjectModelName$(Dest)="!Bowler"
 			ObjectEntity(Dest)=CopyEntity(BowlerMesh)
-		Else If ObjectModelName$(Dest)="!Tentacle"
-			ObjectEntity(Dest)=CopyEntity(TentacleMesh)
 
 
 		Else If ObjectModelName$(Dest)="!Turtle"
@@ -8530,18 +8290,6 @@ Function LoadLevel(levelnumber)
 		Else If ObjectModelName$(Dest)="!Rubberducky"
 			ObjectEntity(Dest)=CopyEntity(rubberduckymesh)
 			
-		Else If ObjectModelName$(Dest)="!Crab"
-			ObjectEntity(Dest)=CopyEntity(CrabMesh)
-			If ObjectSubType(Dest)=0 Then EntityTexture ObjectEntity(Dest),CrabTexture2
-		Else If ObjectModelName$(Dest)="!Troll"
-			ObjectEntity(Dest)=CopyEntity(TrollMesh)
-		Else If ObjectModelName$(Dest)="!Kaboom"
-			ObjectEntity(Dest)=CopyEntity(KaboomMesh)
-			
-
-		Else If ObjectModelName$(Dest)="!BabyBoomer"
-			ObjectEntity(Dest)=CopyEntity(KaboomMesh)
-			
 		Else If ObjectModelName$(Dest)="!GlowWorm"  Or ObjectModelName$(Dest)="!Zipper"
 			ObjectEntity(Dest)=CreateSphere(12)
 			ScaleMesh ObjectEntity(Dest),.1,.1,.1
@@ -8555,18 +8303,6 @@ Function LoadLevel(levelnumber)
 			ObjectEntity(Dest)=MyLoadMesh("data\models\bridges\cylinder1.b3d",0)
 			RotateMesh ObjectEntity(Dest),90,0,0
 			EntityTexture ObjectEntity(Dest),Springtexture
-		
-		Else If ObjectModelName$(Dest)="!Suctube"
-			ObjectEntity(Dest)=CreateSucTubeMesh(ObjectData(Dest,3),ObjectData(Dest,0),True)
-		Else If ObjectModelName$(Dest)="!SuctubeX"
-			ObjectEntity(Dest)=CreateSucTubeXMesh(ObjectData(Dest,3))
-
-
-
-
-		Else If ObjectModelName$(Dest)="!FlipBridge"
-			ObjectEntity(Dest)=CreateCube()
-			ScaleMesh ObjectEntity(Dest),.35,.1,.5
 			
 
 
@@ -8576,12 +8312,6 @@ Function LoadLevel(levelnumber)
 		Else If ObjectModelName$(Dest)="!Obstacle10"
 			ObjectEntity(Dest)=CopyEntity(  ObstacleMesh(10)  )
 			EntityTexture ObjectEntity(Dest), MushroomTex
-		
-		Else If ObjectModelName$(Dest)="!Obstacle51" Or ObjectModelName$(Dest)="!Obstacle55" Or ObjectModelName$(Dest)="!Obstacle59"
-			ObjectEntity(Dest)=CopyEntity(  ObstacleMesh((Asc(Mid$(ObjectModelName$(Dest),10,1))-48)*10+(Asc(Mid$(ObjectModelName$(Dest),11,1))-48)+ObjectData(Dest,0))  )
-			EntityTexture ObjectEntity(Dest), ObstacleTexture((Asc(Mid$(ObjectModelName$(Dest),10,1))-48)*10+(Asc(Mid$(ObjectModelName$(Dest),11,1))-48)+ObjectData(Dest,1))
-
-
 
 		Else If Left$(ObjectModelName$(Dest),9)="!Obstacle"
 			ObjectEntity(Dest)=CopyEntity(ObstacleMesh((Asc(Mid$(ObjectModelName$(Dest),10,1))-48)*10+(Asc(Mid$(ObjectModelName$(Dest),11,1))-48)))
@@ -8599,7 +8329,6 @@ Function LoadLevel(levelnumber)
 		Else If ObjectModelName$(Dest)="!Coin"
 			ObjectEntity(Dest)=CopyMesh(CoinMesh)
 			EntityTexture ObjectEntity(Dest),GoldCoinTexture
-			If ObjectType(Dest)=425 Then EntityTexture ObjectEntity(Dest),RetroRainbowCoinTexture
 		Else If ObjectModelName$(Dest)="!Token"
 			ObjectEntity(Dest)=CopyMesh(CoinMesh)
 			EntityTexture ObjectEntity(Dest),TokenCoinTexture
@@ -8630,17 +8359,6 @@ Function LoadLevel(levelnumber)
 	
 		Else If ObjectModelName$(Dest)="!Square"
 			ObjectEntity(Dest)=MyLoadmesh("data\models\squares\square1.b3d",0)
-			
-		Else If ObjectModelName$(Dest)="!FloingOrb"
-			ObjectEntity(Dest)=CreateSphere()
-			ScaleMesh ObjectEntity(Dest),.3,.3,.3
-			EntityColor ObjectEntity(Dest),255,0,0
-		
-		Else If ObjectModelName$(Dest)="!MagicMirror"
-			ObjectEntity(Dest)=CreateCube()
-			ScaleMesh ObjectEntity(Dest),3.49,2.49,.52
-			EntityColor ObjectEntity(Dest),255,0,0
-			EntityAlpha ObjectEntity(Dest),.5
 
 
 
@@ -8649,9 +8367,6 @@ Function LoadLevel(levelnumber)
 
 		Else If ObjectModelName$(Dest)="!ColourGate"
 			ObjectEntity(Dest)=CreateColourGateMesh(ObjectData(Dest,2),ObjectData(Dest,0))
-			
-		Else If ObjectModelName$(Dest)="!Autodoor"
-			ObjectEntity(Dest)=CopyEntity(Autodoormesh)
 		Else If ObjectModelName$(Dest)="!Transporter"
 			ObjectEntity(Dest)=CreateTransporterMesh(ObjectData(Dest,0),3)
 			RotateMesh ObjectEntity(Dest),0,90*ObjectData(Dest,2),0
@@ -8667,8 +8382,6 @@ Function LoadLevel(levelnumber)
 
 		Else If ObjectModelName$(Dest)="!Key"
 			ObjectEntity(Dest)=CreateKeyMesh(ObjectData(Dest,0))
-		Else If ObjectModelName$(Dest)="!KeyCard"
-			ObjectEntity(Dest)=CreateKeyCardMesh(ObjectData(Dest,0))
 
 
 		Else If ObjectModelName$(Dest)="!SteppingStone"
@@ -8686,37 +8399,8 @@ Function LoadLevel(levelnumber)
 		Else If ObjectModelName$(Dest)="!Fountain"
 			ObjectENtity(Dest)=MyLoadmesh("data\models\houses\fountain01.b3d",0)
 			EntityTexture ObjectEntity(Dest),FountainTexture
-		
-		Else If ObjectModelName$(Dest)="!Retrobox"
-			ObjectEntity(Dest)=CopyEntity(RetroBoxMesh)
 			
-		
-		Else If ObjectModelName$(Dest)="!Retrocoily"
-			ObjectEntity(Dest)=CopyEntity(RetroCoilyMesh)
-			
-
-			
-		Else If ObjectModelName$(Dest)="!Retroscouge"
-			ObjectEntity(Dest)=CopyEntity(RetroScougeMesh)
-			ObjectYawAdjust(Dest)=(-90*ObjectData(Dest,0) +3600) Mod 360
-		
-
-		
-		Else If ObjectModelName$(Dest)="!Retrozbot"
-			ObjectEntity(Dest)=CopyEntity(RetroZbotMesh)
-			ObjectYawAdjust(Dest)=(-90*ObjectData(Dest,0) +3600) Mod 360
-		
-
-		
-		Else If ObjectModelName$(Dest)="!Retroufo"
-			ObjectEntity(Dest)=CopyEntity(RetroUFOMesh)
-			ObjectYawAdjust(Dest)=(-90*ObjectData(Dest,0) +3600) Mod 360
-
-
-		Else If ObjectModelName$(Dest)="!Retrolasergate"
-			ObjectEntity(Dest)=Createretrolasergatemesh(ObjectData(Dest,0))
-			
- 		Else If ObjectModelName$(Dest)="!None" Or ObjectModelName$(Dest)="!SkyMachineMap"
+ 		Else If ObjectModelName$(Dest)="!None"
 			ObjectEntity(Dest)=CreateSphere()
 			ScaleEntity ObjectEntity(Dest),.3,.3,.3
 		Else
@@ -8821,7 +8505,6 @@ Function LoadLevel(levelnumber)
 			TurnEntity ObjectEntity(Dest),ObjectPitchAdjust(Dest),0,ObjectRollAdjust(Dest)
 			TurnEntity ObjectEntity(Dest),0,ObjectYawAdjust(Dest),0
 			
-			If ObjectModelName$(Dest)="!Kaboom" TurnEntity ObjectEntity(Dest),0,90,0
 			EndIf
 		EndIf
 		
@@ -9052,45 +8735,6 @@ Function CreateColourGateMesh(subtype,tex)
 	Return Entity
 
 End Function
-
-Function CreateRetroLaserGateMesh(col)
-		
-	
-	; create the mesh if laser gate
-	Entity=CreateMesh() 
-	cyl=CreateCylinder (6,False) ; an individual cylinder
-	ScaleMesh cyl,0.05,0.5,0.05
-	RotateMesh cyl,0,0,90
-	PositionMesh cyl,0,.25,0.0
-	AddMesh cyl,Entity
-	PositionMesh cyl,0,-.375,.2165
-	AddMesh cyl,Entity
-	PositionMesh cyl,0,0,-.433
-	AddMesh cyl,Entity
-	FreeEntity cyl
-	
-	EntityAlpha Entity,0.5
-	
-	If col=0
-		EntityColor Entity,255,0,0
-	Else If col=1
-		EntityColor Entity,255,128,0
-	Else If col=2
-		EntityColor Entity,255,255,0
-	Else If col=3
-		EntityColor Entity,0,255,0
-	Else If col=4
-		EntityColor Entity,0,255,255
-	Else If col=5
-		EntityColor Entity,0,0,255
-	Else 
-		EntityColor Entity,255,0,255
-	EndIf
-	
-	Return Entity
-	
-End Function
-
 
 Function CreateTransporterMesh(tex,subtype)
 	
@@ -9371,44 +9015,6 @@ Function CreateKeyMesh(col)
 	Return Entity
 End Function
 
-Function CreateKeyCardMesh(col)
-
-	tex=24+col
-
-	entity=CreateMesh()
-
-
-	surface=CreateSurface(entity)
-	
-	AddVertex (surface,-.4,.4,-.1,(tex Mod 8)*0.125+0.000,Floor((tex Mod 64)/8)*0.125+0.000)
-	AddVertex (surface,.4,.4,-.10,(tex Mod 8)*0.125+0.125,Floor((tex Mod 64)/8)*0.125+0.000)
-	AddVertex (surface,-.4,-.4,-.10,(tex Mod 8)*0.125+0.000,Floor((tex Mod 64)/8)*0.125+0.125)
-	AddVertex (surface,.4,-.4,0-.1,(tex Mod 8)*0.125+0.125,Floor((tex Mod 64)/8)*0.125+0.125)
-	
-	AddVertex (surface,-.4,.4,.10,(tex Mod 8)*0.125+0.000,Floor((tex Mod 64)/8)*0.125+0.000)
-	AddVertex (surface,.4,.4,.10,(tex Mod 8)*0.125+0.125,Floor((tex Mod 64)/8)*0.125+0.000)
-	AddVertex (surface,-.4,-.4,.10,(tex Mod 8)*0.125+0.000,Floor((tex Mod 64)/8)*0.125+0.125)
-	AddVertex (surface,.4,-.4,.10,(tex Mod 8)*0.125+0.125,Floor((tex Mod 64)/8)*0.125+0.125)
-
-
-
-	AddTriangle(surface,0,1,2)
-	AddTriangle(surface,1,3,2)
-	
-	AddTriangle(surface,5,4,6)
-	AddTriangle(surface,5,6,7)
-	
-	RotateMesh Entity,90,0,0
-	PositionMesh Entity,0,.3,0
-
-	
-	
-	
-	UpdateNormals Entity
-	EntityTexture Entity,ButtonTexture
-	Return Entity
-End Function
-
 
 Function CreateCustomItemMesh(tex)
 	entity=CreateMesh()
@@ -9486,213 +9092,14 @@ Function CreateCustomItemMesh(tex)
 
 End Function
 
-Function CreatePushbotMesh(tex,dir)
-	
-	Entity=CreateMesh()
-	Surface=CreateSurface(Entity)
-	
-	If dir=2 ;(180 turn around)
-		dir=0
-		;front
-		AddVertex (surface,-.4,0,.4,0,.25+.25*dir)
-		AddVertex (surface,+.4,0,.4,0,0+.25*dir)
-		AddVertex (surface,-.2,.3,.2,.25,.20+.25*dir)
-		AddVertex (surface,+.2,.3,.2,.25,.05+.25*dir)
-		AddTriangle (surface,0,1,2)
-		AddTriangle (surface,1,3,2)
-		; Top
-		AddVertex (surface,-.4,.4,-.4,.5,.20+.25*dir)
-		AddVertex (surface,+.4,.4,-.4,.5,.05+.25*dir)
-		AddTriangle (surface,2,3,4)
-		AddTriangle (surface,3,5,4)
-		;Back
-		AddVertex (surface,-.45,0,-.45,.75,.25+.25*dir)
-		AddVertex (surface,+.45,0,-.45,.75,0+.25*dir)
-		AddTriangle (surface,4,5,6)
-		AddTriangle (surface,5,7,6)
-		; Left
-		AddVertex (surface,-.4,0,.4,.75,.25+.25*dir)
-		AddVertex (surface,-.45,0,-.45,.75,0+.25*dir)
-		AddVertex (surface,-.2,.3,.2,1,.25+.25*dir)
-		AddVertex (surface,-.4,.4,-.4,1,0+.25*dir)
-		AddTriangle (surface,10,9,8)
-		AddTriangle (surface,10,11,9)
-		; Right
-		AddVertex (surface,.4,0,.4,.75,.25+.25*dir)
-		AddVertex (surface,.45,0,-.45,.75,0+.25*dir)
-		AddVertex (surface,.2,.3,.2,1,.25+.25*dir)
-		AddVertex (surface,.4,.4,-.4,1,0+.25*dir)
-		AddTriangle (surface,12,13,14)
-		AddTriangle (surface,13,15,14)
-
-	
-	Else
-		dir=1-dir
-		; Front
-		AddVertex (surface,-.4,0,.4,0,.25+.25*dir)
-		AddVertex (surface,+.4,0,.4,0,0+.25*dir)
-		AddVertex (surface,-.2,.3,.2,.25,.25+.25*dir)
-		AddVertex (surface,+.2,.3,.2,.25,0+.25*dir)
-		AddTriangle (surface,0,1,2)
-		AddTriangle (surface,1,3,2)
-		; Top
-		AddVertex (surface,-.4,.4,-.4,.5,.25+.25*dir)
-		AddVertex (surface,+.4,.4,-.4,.5,0+.25*dir)
-		AddTriangle (surface,2,3,4)
-		AddTriangle (surface,3,5,4)
-		;Back
-		AddVertex (surface,-.45,0,-.45,.75,.25+.25*dir)
-		AddVertex (surface,+.45,0,-.45,.75,0+.25*dir)
-		AddTriangle (surface,4,5,6)
-		AddTriangle (surface,5,7,6)
-		; Left
-		AddVertex (surface,-.4,0,.4,.75,.25+.25*dir)
-		AddVertex (surface,-.45,0,-.45,.75,0+.25*dir)
-		AddVertex (surface,-.2,.3,.2,1,.25+.25*dir)
-		AddVertex (surface,-.4,.4,-.4,1,0+.25*dir)
-		AddTriangle (surface,10,9,8)
-		AddTriangle (surface,10,11,9)
-		; Right
-		AddVertex (surface,.4,0,.4,.75,.25+.25*dir)
-		AddVertex (surface,.45,0,-.45,.75,0+.25*dir)
-		AddVertex (surface,.2,.3,.2,1,.25+.25*dir)
-		AddVertex (surface,.4,.4,-.4,1,0+.25*dir)
-		AddTriangle (surface,12,13,14)
-		AddTriangle (surface,13,15,14)
-	EndIf
-
-	
-	
-	; Col
-	AddVertex (surface,-.05,.33,.05,(tex Mod 8)*0.125+.01,(tex/8)*0.125+.51)
-	AddVertex (surface,.05,.33,.05,(tex Mod 8)*0.125+.115,(tex/8)*0.125+.51)
-	AddVertex (surface,-.25,.39,-.35,(tex Mod 8)*0.125+.01,(tex/8)*0.125+.51+.115)
-	AddVertex (surface,.25,.39,-.35,(tex Mod 8)*0.125+.115,(tex/8)*0.125+.51+.115)
-	AddTriangle (surface,16,17,18)
-	AddTriangle (surface,17,19,18)
-	
-		
-	
-	UpdateNormals Entity
-	
-	EntityTexture Entity,PushbotTexture
-	Return Entity
-
-End Function
-
-Function CreateSuctubeMesh(tex,col,active)
-	
-	Entity=CreateMesh()
-	Surface=CreateSurface(Entity)
-	
-	nofsegments#=16
-	
-	i=0
-	angle#=-(360.0/nofsegments)/2.0+i*(360.0/nofsegments)
-	; top triangle
-	AddVertex (surface,-0.3,1.71,-0.3,(col Mod 8)*0.125+.01,(col/8)*0.125+.51)
-	AddVertex (surface,+0.3,1.71,-0.3,(col Mod 8)*0.125+.115,(col/8)*0.125+.51)
-	AddVertex (surface,0,1.71,+0.3,(col Mod 8)*0.125+.01,(col/8)*0.125+.51+.115)
-	AddTriangle (surface,0,1,2)
-	AddTriangle (surface,0,2,1)
-
-	
-	For i=0 To nofsegments-1
-		angle#=-(360.0/nofsegments)/2.0+i*(360.0/nofsegments)
-		AddVertex (surface,1.5*Sin(angle),0.7+1.0*Cos(angle),-0.505,0.25*tex,107.0/512.0)
-		AddVertex (surface,1.5*Sin(angle),0.7+1.0*Cos(angle),+0.505,0.25*tex,88.0/512.0)
-		AddVertex (surface,1.5*Sin(angle+(360.0/nofsegments)),0.7+1.0*Cos(angle+(360.0/nofsegments)),-0.505,0.25*tex+0.25,107.0/512.0)
-		AddVertex (surface,1.5*Sin(angle+(360.0/nofsegments)),0.7+1.0*Cos(angle+(360.0/nofsegments)),+0.505,0.25*tex+0.25,88.0/512.0)
-
-		;i=i+1 ; to account for the first four vertices
-		AddTriangle(surface,i*4+0+3,i*4+1+3,i*4+2+3)
-		AddTriangle(surface,i*4+1+3,i*4+3+3,i*4+2+3)
-		
-		AddTriangle(surface,i*4+2+3,i*4+1+3,i*4+0+3)
-		AddTriangle(surface,i*4+2+3,i*4+3+3,i*4+1+3)
-		;i=i-1
-	Next
-	
-
-	
-
-	UpdateNormals Entity
-	
-	EntityTexture Entity,GateTexture
-	Return Entity
-End Function
-
-Function CreateSuctubeXMesh(tex)
-	
-	Entity=CreateMesh()
-	Surface=CreateSurface(Entity)
-	
-	nofsegments#=16
-	nofarcpoints#=8
-	
-		
-
-	For j=0 To nofarcpoints
-		angle2#=(90.0/nofarcpoints)*j
-		For i=0 To nofsegments-1
-			angle#=-(360.0/nofsegments)/2.0+i*(360.0/nofsegments)
-			height#=0.7+1.0*Cos(angle)
-			radius#=1.5-1.5*Sin(angle)
-			
-			
-			If i Mod 2 =0
-				xtex#=0.25
-			Else
-				xtex#=0.0
-			EndIf
-
-			If j Mod 2 =0
-				ytex#=19.0
-			Else
-				ytex#=0.0
-			EndIf
-			
-			AddVertex (surface,1.5-radius*Cos(angle2),height,-1.5+radius*Sin(angle2),0.25*tex+xtex,(107.0-ytex)/512.0)
-			
-		Next
-	Next
-	
-	For j=0 To nofarcpoints-1
-		For i=0 To nofsegments-1
-		
-			AddTriangle(surface,j*nofsegments+i,j*nofsegments+((i+1) Mod nofsegments),(j+1)*nofsegments+i)
-			AddTriangle(surface,(j+1)*nofsegments+i,j*nofsegments+((i+1) Mod nofsegments),(j+1)*nofsegments+((i+1) Mod nofsegments))
-			
-			AddTriangle(surface,j*nofsegments+((i+1) Mod nofsegments),j*nofsegments+i,(j+1)*nofsegments+i)
-			AddTriangle(surface,(j+1)*nofsegments+((i+1) Mod nofsegments),j*nofsegments+((i+1) Mod nofsegments),(j+1)*nofsegments+i)
-
-
-			
-		Next
-	Next
-	
-
-	
-
-	UpdateNormals Entity
-	
-	EntityTexture Entity,GateTexture
-	Return Entity
-End Function
-
-
-
-
-
-
-
 Function GetTextureNames()
 
-	dir=ReadDir("data\leveltextures")
+	dir=ReadDir("data\LevelTextures")
 	
 	NofLevelTextures=0
 	NofWaterTextures=0
 
+	If MASTERUSER = True Then
 	file$=NextFile$(dir)
 	While file$<>""
 		If Lower$(Right$(file$,4))=".wdf" And Lower$(Left$(file$,9))="mfwfmufy "
@@ -9706,13 +9113,22 @@ Function GetTextureNames()
 			NofWaterTextures=NofWaterTextures+1
 		EndIf
 		file$=NextFile$(dir)
-
 	Wend
-	
+	Else
+	file$=NextFile$(dir)
+	While file$<>""
+		If Lower$(Right$(file$,4))=".bmp" And Lower$(Left$(file$,9))="leveltex "
+			Leveltexturename$(NofLevelTextures)=file$
+			NofLevelTextures=NofLevelTextures+1
+		EndIf
+		If Lower$(Right$(file$,4))=".jpg" And Lower$(Left$(file$,9))="watertex "
+			Watertexturename$(NofWaterTextures)=file$
+			NofWaterTextures=NofWaterTextures+1
+		EndIf
+		file$=NextFile$(dir)
+	Wend
+	EndIf
 	CloseDir dir
-
-		
-	
 End Function
 
 Function MyLoadTexture(ex$,flag)
@@ -10657,13 +10073,13 @@ Function StartMaster()
 	If FileType(globaldirname$+"\Adventures\editing\"+ex$+AdventureFileName$+"\master.dat")=1
 		LoadMasterFile()
 		If customiconname$="Standard"
-			IconTextureCustom=myLoadTexture("data\Graphics\icons-custom.bmp",4)
+			IconTextureCustom=myLoadTexture("data\graphics\icons-custom.bmp",4)
 		Else
 			IconTextureCustom=myLoadTexture(globaldirname$+"\Custom Content\Icons\icons "+customiconname$+".bmp",4)
 		EndIf
 	Else
 		CustomIconName$="Standard"
-		IconTextureCustom=myLoadTexture("data\Graphics\icons-custom.bmp",4)
+		IconTextureCustom=myLoadTexture("data\graphics\icons-custom.bmp",4)
 		AdventureStartX=1
 		AdventureStartY=1 ; x/y position of player start
 		AdventureStartDir=0
@@ -11244,7 +10660,7 @@ Function MasterMainLoop()
 			If CustomIconName$="" Or CustomIconName$="Standard"
 				CustomIconName$="Standard"
 			Else
-				If FileType(globaldirname$+"\Custom Content\icons\icons "+CustomIconName$+".bmp")<>1
+				If FileType(globaldirname$+"\Custom Content\Icons\icons "+CustomIconName$+".bmp")<>1
 					Locate 0,0
 					Color 0,0,0
 					Rect 0,0,500,60,True
@@ -11316,9 +10732,9 @@ Function MasterMainLoop()
 					FreeTexture leveltexture
 					FreeTexture watertexture
 					CurrentLevelTexture=0
-					LevelTexture=myLoadTexture("data\Leveltextures\"+LevelTexturename$(CurrentLevelTexture),1)
+					LevelTexture=myLoadTexture("data\LevelTextures\"+LevelTexturename$(CurrentLevelTexture),1)
 					CurrentWaterTexture=0	
-					waterTexture=myLoadTexture("data\Leveltextures\"+waterTexturename$(CurrentWaterTexture),2)
+					waterTexture=myLoadTexture("data\LevelTextures\"+waterTexturename$(CurrentWaterTexture),2)
 					EntityTexture TexturePlane,LevelTexture
 					EntityTexture CurrentWaterTile,WaterTexture
 			
@@ -11435,7 +10851,7 @@ Function LoadMasterFile()
 	If CustomIconName$="" Or CustomIconName$="Standard"
 		CustomIconName$="Standard"
 	Else
-		If FileType(globaldirname$+"\custom content\icons\icons "+CustomIconName$+".bmp")<>1
+		If FileType(globaldirname$+"\Custom Content\Icons\icons "+CustomIconName$+".bmp")<>1
 			Cls
 			Print "Error: Custom Icon File '"+customiconname$+"' not found."
 			Print "Reverting to 'Standard' Custom Icon Texture."
@@ -12779,7 +12195,7 @@ Include "particles.bb"
 
 
 .winning
-Data "None (e.g. collect star)","Rescue All Stinkers","Capture/Destroy Scritters","Collect All Gems","Destroy All Bricks","Destroy FireFlowers","Race","Capture/Destroy Crabs","Rescue All BabyBoomers","Destroy All ZBots"
+Data "None (e.g. collect star)","Rescue All Stinkers","Capture/Destroy Scritters","Collect All Gems","Destroy All Bricks","Destroy FireFlowers","Race"
 Data "Done"
 	
 .Commands
