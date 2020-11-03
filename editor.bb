@@ -7630,7 +7630,6 @@ Function SaveLevel()
 
 	file=WriteFile (globaldirname$+"\Adventures\editing\"+ex2$+AdventureFileName$+"\"+currentlevelnumber+".wlv")
 	
-	WriteInt file,-999
 	WriteInt file,LevelWidth
 
 	WriteInt file,LevelHeight
@@ -7894,10 +7893,11 @@ Function LoadLevel(levelnumber)
 	Next
 
 	file=ReadFile (globaldirname$+"\Adventures\editing\"+ex2$+AdventureFileName$+"\"+levelnumber+".wlv")
-	Repeat
-		LevelWidth=ReadInt(file)
-	Until LevelWidth<>-999
 
+	    Repeat
+		    LevelWidth=ReadInt(file)
+	    Until LevelWidth<>-999
+		
 	LevelHeight=ReadInt(File)
 	For j=0 To LevelHeight-1
 		For i=0 To LevelWidth-1
