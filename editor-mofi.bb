@@ -13,7 +13,9 @@
 
 Include "particles-define.bb"
 
-Global VersionText$="WA MOFI Editor (BetterEditor Mod v1.03)"
+Global VersionText$="WA MOFI Editor (BetterEditor Mod v1.04)"
+Global TextSetting$="FONT: NORMAL"
+Global TextSettingDat
 
 Global MASTERUSER=True
 
@@ -694,11 +696,10 @@ HideEntity FireFlowerMesh
 
 
 ; Boxes etc
-Global BarrelMesh,BarrelTexture1,BarrelTexture2,BarrelTexture3
+Global BarrelMesh,BarrelTexture1,BarrelTexture2
 BarrelMesh=MyLoadMesh("data\models\barrels\barrel.b3d",0)
 BarrelTexture1=MyLoadTexture("Data\models\barrels\barrel1.jpg",1)
 BarrelTexture2=MyLoadTexture("Data\models\barrels\barrel2.jpg",1)
-BarrelTexture3=MyLoadTexture("Data\models\barrels\barrel3.jpg",1)
 HideEntity BarrelMesh
 
 ; Chompers
@@ -1560,7 +1561,7 @@ Function EditorControls()
 	; Change the CurrentTile
 	; *************************************
 	
-	Text 590,5,"TILES"
+	Text 680,5,"TILES"
 		
 	StartX=510
 	StartY=20
@@ -2015,6 +2016,23 @@ Function EditorControls()
 	Text 712,228,Str$(AmbientRed)
 	Text 741,228,Str$(AmbientGreen)
 	Text 770,228,Str$(AmbientBlue)
+	Text 520,5,Str$(TextSetting$)
+
+	If mx>=520 And mx<580
+		If my>=10 And my<50 And leftmouse=True And leftmousereleased=True
+			If TextSettingDat=0
+				TextSetting$ = "FONT: THICC"
+				SetFont LoadFont("courier", 16)
+				leftmousereleased=False
+				TextSettingDat=1
+			ElseIf TextSettingDat=1
+				TextSetting$ = "FONT: NORMAL"
+				SetFont LoadFont("courier", 12)
+				leftmousereleased=False
+				TextSettingDat=1
+			EndIf
+		EndIf
+	EndIf
 
 	If mx>=715 
 				
@@ -7173,9 +7191,6 @@ Function BuildCurrentObjectModel()
 	Else If CurrentObjectModelName$="!Barrel2"
 		CurrentObjectModel=CopyEntity(BarrelMesh)
 		EntityTexture CurrentObjectModel,BarrelTexture2
-	Else If CurrentObjectModelName$="!Barrel3"
-		CurrentObjectModel=CopyEntity(BarrelMesh)
-		EntityTexture CurrentObjectModel,BarrelTexture3
 	Else If CurrentObjectModelName$="!Cuboid"
 		CurrentObjectModel=CreateCube()
 		ScaleMesh CurrentObjectModel,0.4,0.4,0.4
