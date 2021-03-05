@@ -12,6 +12,4 @@
  
  2. Mod editor exe with the corresponding editor. (editor.bb - WA 0.96) (editor-mofi.bb - WA MOFI)
  
- NOTE: Currently both files are MOFI editor because WA1 is WIP. So currently its only for MOFI.
- 
  Fork from Cyndanera!

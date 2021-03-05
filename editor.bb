@@ -8,15 +8,14 @@
 ;								msfolder.dll and .decls in Blitz3D/userlibs
 ;
 ;
-								
-
 
 Include "particles-define.bb"
 
-Global VersionText$="WA 0.96 Editor (BetterEditor Mod v1.03)"
+Global VersionText$="WA 0.96 Editor (BetterEditor Mod v1.04)"
+Global TextSetting$="FONT: NORMAL"
+Global TextSettingDat
 
 Global MASTERUSER=False
-
 Global LeftMouse,LeftMouseReleased,RightMouse,RightMouseReleased
 Global ReturnKey,ReturnKeyReleased,DeleteKey,DeleteKeyReleased
 
@@ -437,7 +436,7 @@ Global AmbientBlue=100
 
 ; Setup Graphics, Lights, Camera
 ; ================================
-	Graphics3D 800,600,32,2
+	Graphics3D 800,600,32,2	
 SetBuffer BackBuffer()
 
 AmbientLight 155,155,155
@@ -637,8 +636,8 @@ Global IconTextureCustom=0
 
 
 ; Signs
-Dim SignMesh(4),SignTexture(4)
-For i=0 To 4
+Dim SignMesh(3),SignTexture(3)
+For i=0 To 3
 	SignMesh(i)=MyLoadMesh("data\models\sign\sign"+Str$(i)+".3ds",0)
 	SignTexture(i)=MyLoadTexture("data\models\sign\sign"+Str$(i)+".jpg",1)
 	HideEntity SignMesh(i)
@@ -652,7 +651,7 @@ Next
 For i=0 To 1
 	CottageTexture(i)=MyLoadTexture("data\models\houses\cottage"+Str$(i)+".png",1)
 Next
-For i=0 To 2
+For i=0 To 1
 	HouseTexture(i)=MyLoadTexture("data\models\houses\townhouse"+Str$(i)+".png",1)
 Next
 For i=0 To 0
@@ -686,17 +685,15 @@ Global FireFlowerMesh=MyLoadMesh("data\models\fireflower\fireflower2.3ds",0)
 RotateMesh FireFlowerMesh,-90,0,0
 RotateMesh FireFlowerMesh,0,90,0
 Global FireFlowerTexture=MyLoadTexture("data\models\fireflower\fireflower04.png",1)
-Global FireFlowerTexture2=myLoadTexture("data\models\fireflower\fireflowerice.png",4)
 EntityTexture FireFlowerMesh,FireFlowerTexture
 HideEntity FireFlowerMesh
 
 
 ; Boxes etc
-Global BarrelMesh,BarrelTexture1,BarrelTexture2,BarrelTexture3
+Global BarrelMesh,BarrelTexture1,BarrelTexture2
 BarrelMesh=MyLoadMesh("data\models\barrels\barrel.b3d",0)
 BarrelTexture1=MyLoadTexture("Data\models\barrels\barrel1.jpg",1)
 BarrelTexture2=MyLoadTexture("Data\models\barrels\barrel2.jpg",1)
-BarrelTexture3=MyLoadTexture("Data\models\barrels\barrel3.jpg",1)
 HideEntity BarrelMesh
 
 ; Chompers
@@ -754,17 +751,6 @@ ObstacleTexture(2)=myLoadTexture("data\models\Trees\rocks2.jpg",1)
 EntityTexture ObstacleMesh(2),ObstacleTexture(2)
 HideEntity ObstacleMesh(2)
 
-ObstacleMesh(3)=myLoadMesh("data\models\Other\volcano01.b3d",0)
-ObstacleTexture(3)=myLoadTexture("data\models\Other\volcano01.bmp",1)
-EntityTexture ObstacleMesh(3),ObstacleTexture(3)
-HideEntity ObstacleMesh(3)
-
-ObstacleMesh(4)=myLoadMesh("data\models\Other\volcano01.b3d",0)
-ObstacleTexture(4)=myLoadTexture("data\models\other\volcano02.jpg",1)
-EntityTexture ObstacleMesh(4),ObstacleTexture(4)
-HideEntity ObstacleMesh(4)
-
-
 ObstacleMesh(5)=myLoadMesh("data\models\Trees\flower.3ds",0)
 ObstacleTexture(5)=myLoadTexture("data\models\Trees\flower1.jpg",1)
 EntityTexture ObstacleMesh(5),ObstacleTexture(5)
@@ -776,45 +762,10 @@ EntityTexture ObstacleMesh(6),ObstacleTexture(6)
 UpdateNormals obstaclemesh(6)
 HideEntity ObstacleMesh(6)
 
-ObstacleMesh(7)=myLoadMesh("data\models\Trees\watervine.b3d",0)
-ObstacleTexture(7)=myLoadTexture("data\models\Trees\watervine.jpg",1)
-EntityTexture ObstacleMesh(7),ObstacleTexture(7)
-UpdateNormals obstaclemesh(7)
-HideEntity ObstacleMesh(7)
-
-ObstacleMesh(8)=myLoadMesh("data\models\Trees\fern.b3d",0)
-ObstacleTexture(8)=myLoadTexture("data\models\Trees\fern.bmp",4)
-EntityTexture ObstacleMesh(8),ObstacleTexture(8)
-HideEntity ObstacleMesh(8)
-
-ObstacleMesh(9)=myLoadMesh("data\models\Trees\fern02.b3d",0)
-ObstacleTexture(9)=myLoadTexture("data\models\Trees\fern.bmp",4)
-EntityTexture ObstacleMesh(9),ObstacleTexture(9)
-HideEntity ObstacleMesh(9)
-
-
 ObstacleMesh(10)=myLoadMesh("data\models\Trees\mushroom.3ds",0)
 MushroomTex=myLoadTexture("data\models\Trees\mushroom.jpg",1)
 EntityTexture ObstacleMesh(10), MushroomTex
 HideEntity ObstacleMesh(10)
-
-ObstacleMesh(11)=myLoadMesh("data\models\Trees\fern3.3ds",0)
-ObstacleTexture(11)=myLoadTexture("data\models\Trees\fern3.png",4)
-EntityTexture ObstacleMesh(11),ObstacleTexture(11)
-HideEntity ObstacleMesh(11)
-
-
-ObstacleMesh(12)=myLoadMesh("data\models\Trees\plant1.3ds",0)
-ObstacleTexture(12)=myLoadTexture("data\models\Trees\plant1.png",4)
-EntityTexture ObstacleMesh(12),ObstacleTexture(12)
-HideEntity ObstacleMesh(12)
-
-
-ObstacleMesh(13)=myLoadMesh("data\models\Trees\plant2.b3d",0)
-ObstacleTexture(13)=myLoadTexture("data\models\Trees\plant2.png",4)
-EntityTexture ObstacleMesh(13),ObstacleTexture(13)
-HideEntity ObstacleMesh(13)
-
 
 ObstacleMesh(15)=myLoadMesh("data\models\Trees\leaftree01.b3d",0)
 ObstacleTexture(15)=myLoadTexture("data\models\Trees\leaftree01_03.png",4)
@@ -850,21 +801,6 @@ ObstacleMesh(21)=myLoadMesh("data\models\Trees\leaftree02.b3d",0)
 ObstacleTexture(21)=myLoadTexture("data\models\Trees\leaftree02_02.png",4)
 EntityTexture ObstacleMesh(21),ObstacleTexture(21)
 HideEntity ObstacleMesh(21)
-
-ObstacleMesh(22)=myLoadMesh("data\models\Trees\tree_jungle_typeA.b3d",0)
-ObstacleTexture(22)=myLoadTexture("data\models\Trees\tree_jungle_typeA.bmp",4)
-EntityTexture ObstacleMesh(22),ObstacleTexture(22)
-HideEntity ObstacleMesh(22)
-
-ObstacleMesh(23)=myLoadMesh("data\models\Trees\tree_jungle_typeB.b3d",0)
-ObstacleTexture(23)=myLoadTexture("data\models\Trees\tree_jungle_typeB.bmp",4)
-EntityTexture ObstacleMesh(23),ObstacleTexture(23)
-HideEntity ObstacleMesh(23)
-
-ObstacleMesh(24)=myLoadMesh("data\models\Trees\tree_palm.b3d",0)
-ObstacleTexture(24)=myLoadTexture("data\models\Trees\palmtree01.bmp",4)
-EntityTexture ObstacleMesh(24),ObstacleTexture(24)
-HideEntity ObstacleMesh(24)
 
 ObstacleMesh(25)=myLoadMesh("data\models\Bridges\bridgeend.3ds",0)
 ObstacleTexture(25)=myLoadTexture("data\models\Bridges\bridgebrick.png",1)
@@ -942,36 +878,6 @@ HideEntity ObstacleMesh(41)
 
 ObstacleMesh(42)=myLoadMesh("data\models\houses\windmill_rotor.b3d",0)
 	HideEntity ObstacleMesh(42)
-	
-ObstacleMesh(43)=myLoadMesh("data\models\houses\hut01.b3d",0)
-ObstacleTexture(43)=myLoadTexture("data\models\houses\hut01.jpg",1)
-EntityTexture ObstacleMesh(43),ObstacleTexture(43)
-HideEntity ObstacleMesh(43)
-
-ObstacleMesh(44)=myLoadMesh("data\models\other\ship01.b3d",0)
-ObstacleTexture(44)=myLoadTexture("data\models\other\ship01.bmp",1)
-EntityTexture ObstacleMesh(44),ObstacleTexture(44)
-HideEntity ObstacleMesh(44)
-
-ObstacleMesh(45)=myLoadMesh("data\models\houses\waterwheel.3ds",0)
-ObstacleTexture(45)=myLoadTexture("data\models\cage\cage.jpg",1)
-EntityTexture ObstacleMesh(45),ObstacleTexture(45)
-HideEntity ObstacleMesh(45)
-
-ObstacleMesh(46)=myLoadMesh("data\models\houses\bridge.3ds",0)
-ObstacleTexture(46)=myLoadTexture("data\models\cage\cage.jpg",1)
-EntityTexture ObstacleMesh(46),ObstacleTexture(46)
-HideEntity ObstacleMesh(46)
-
-ObstacleMesh(47)=myLoadMesh("data\models\houses\machine.3ds",0)
-ObstacleTexture(47)=myLoadTexture("data\models\houses\machine.jpg",1)
-EntityTexture ObstacleMesh(47),ObstacleTexture(47)
-HideEntity ObstacleMesh(47)
-
-ObstacleMesh(48)=myLoadMesh("data\models\other\starship.3ds",0)
-ObstacleTexture(48)=myLoadTexture("data\models\other\starship.jpg",1)
-EntityTexture ObstacleMesh(48),ObstacleTexture(48)
-HideEntity ObstacleMesh(48)
 
 Global Fence1=MyLoadmesh("data\models\houses\fence.3ds",0)
 HideEntity Fence1
@@ -1503,7 +1409,7 @@ Function EditorControls()
 	; Change the CurrentTile
 	; *************************************
 	
-	Text 590,5,"TILES"
+	Text 680,5,"TILES"
 		
 	StartX=510
 	StartY=20
@@ -1946,9 +1852,26 @@ Function EditorControls()
 	Text 712,228,Str$(AmbientRed)
 	Text 741,228,Str$(AmbientGreen)
 	Text 770,228,Str$(AmbientBlue)
+	Text 520,5,Str$(TextSetting$)
+	
+	If mx>=520 And mx<580
+		If my>=10 And my<50 And leftmouse=True And leftmousereleased=True
+			If TextSettingDat=0
+				TextSetting$ = "FONT: THICC"
+				SetFont LoadFont("courier", 16)
+				leftmousereleased=False
+				TextSettingDat=1
+			ElseIf TextSettingDat=1
+				TextSetting$ = "FONT: NORMAL"
+				SetFont LoadFont("courier", 12)
+				leftmousereleased=False
+				TextSettingDat=1
+			EndIf
+		EndIf
+	EndIf
 
 	If mx>=715 
-				
+
 		If my>=100 And my<115 And leftmouse=True And leftmousereleased=True
 			leftmousereleased=False
 			LevelWeather=LevelWeather+1
@@ -4593,10 +4516,24 @@ Function DisplayObjectAdjuster(i)
 			tex2$="Type"
 			
 			Select CurrentObjectData(1)
-			Case 0
-				tex$="Fire"
 			Case 1
-				tex$="Ice"
+				tex$="Crimson/Floing"
+			Case 0
+				tex$="Pow"
+			Case -1
+				tex$="Pop"
+			Case -2
+				tex$="Grow"
+			Case -3
+				tex$="Brr"
+			Case -4
+				tex$="Flash"
+			Case -5
+				tex$="Blink"
+			Case -6
+				tex$="White/Null"
+			Case -7
+				tex$="Bounce/Rainbow"
 			End Select
 		EndIf
 
@@ -5938,12 +5875,6 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(1)<0 CurrentObjectData(1)=1
 
 		EndIf
-		If CurrentObjectModelName$="!FireFlower" Or CurrentObjectModelName$="!Cuboid"
-
-			If CurrentObjectData(1)>1 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=1
-
-		EndIf
 
 		If CurrentObjectModelName$="!Gem"
 			If CurrentObjectData(1)>7 CurrentObjectData(1)=0
@@ -6981,9 +6912,6 @@ Function BuildCurrentObjectModel()
 	Else If CurrentObjectModelName$="!Barrel2"
 		CurrentObjectModel=CopyEntity(BarrelMesh)
 		EntityTexture CurrentObjectModel,BarrelTexture2
-	Else If CurrentObjectModelName$="!Barrel3"
-		CurrentObjectModel=CopyEntity(BarrelMesh)
-		EntityTexture CurrentObjectModel,BarrelTexture3
 	Else If CurrentObjectModelName$="!Cuboid"
 		CurrentObjectModel=CreateCube()
 		ScaleMesh CurrentObjectModel,0.4,0.4,0.4

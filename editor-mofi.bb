@@ -4689,10 +4689,24 @@ Function DisplayObjectAdjuster(i)
 			tex2$="Type"
 			
 			Select CurrentObjectData(1)
-			Case 0
-				tex$="Fire"
 			Case 1
-				tex$="Ice"
+				tex$="Crimson/Floing"
+			Case 0
+				tex$="Pow"
+			Case -1
+				tex$="Pop"
+			Case -2
+				tex$="Grow"
+			Case -3
+				tex$="Brr"
+			Case -4
+				tex$="Flash"
+			Case -5
+				tex$="Blink"
+			Case -6
+				tex$="White/Null"
+			Case -7
+				tex$="Bounce/Rainbow"
 			End Select
 		EndIf
 
@@ -6089,12 +6103,6 @@ Function AdjustObjectAdjuster(i)
 			If CurrentObjectData(1)<1 CurrentObjectData(1)=3
 		EndIf
 		If CurrentObjectModelName$="!StarGate"
-			If CurrentObjectData(1)>1 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=1
-
-		EndIf
-		If CurrentObjectModelName$="!FireFlower" Or CurrentObjectModelName$="!Cuboid"
-
 			If CurrentObjectData(1)>1 CurrentObjectData(1)=0
 			If CurrentObjectData(1)<0 CurrentObjectData(1)=1
 
