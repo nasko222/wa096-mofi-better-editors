@@ -11,7 +11,7 @@
 
 Include "particles-define.bb"
 
-Global VersionText$="WA 0.96 Editor (BetterEditor Mod v1.04)"
+Global VersionText$="WA 0.96 Editor (BetterEditor Mod v1.05-pre)"
 Global TextSetting$="FONT: NORMAL"
 Global TextSettingDat
 
@@ -1314,8 +1314,13 @@ Function EditorControls()
 
 				If LeftMouse=True And LeftMouseReleased=True
 					
-					PlaceObject(x,y)
+					If KeyDown(29) Or KeyDown(157)
+						PlaceObject(x,y,true)
+					Else
+						PlaceObject(x,y,false)
+					EndIf
 					LeftMouseReleased=False
+					
 					
 				EndIf
 				If RightMouse=True And RightMouseReleased=True
@@ -1854,18 +1859,18 @@ Function EditorControls()
 	Text 770,228,Str$(AmbientBlue)
 	Text 520,5,Str$(TextSetting$)
 	
-	If mx>=520 And mx<580
-		If my>=10 And my<50 And leftmouse=True And leftmousereleased=True
+	If mx>=520 And mx<640
+		If my>=5 And my<15 And leftmouse=True And leftmousereleased=True
 			If TextSettingDat=0
 				TextSetting$ = "FONT: THICC"
-				SetFont LoadFont("courier", 16)
+				SetFont LoadFont("courier", 15)
 				leftmousereleased=False
 				TextSettingDat=1
 			ElseIf TextSettingDat=1
 				TextSetting$ = "FONT: NORMAL"
 				SetFont LoadFont("courier", 12)
 				leftmousereleased=False
-				TextSettingDat=1
+				TextSettingDat=0
 			EndIf
 		EndIf
 	EndIf
@@ -3484,16 +3489,17 @@ Function SaveObjectPreset()
 	EndIf
 End Function
 
-Function PlaceObject(x#,y#)
+Function PlaceObject(x#,y#,keepExisting)
 
-
+	If keepExisting = false
 	; first check if another object exists on the same tile
-	For i=0 To NofObjects-1
-		If ObjectTileX(i)=Floor(x) And ObjectTileY(i)=Floor(y)
-			DeleteObject(i)
-			i=i-1
-		EndIf
-	Next
+		For i=0 To NofObjects-1
+			If ObjectTileX(i)=Floor(x) And ObjectTileY(i)=Floor(y)
+				DeleteObject(i)
+				i=i-1
+			EndIf
+		Next
+	EndIf
 	
 	ObjectHatEntity(NofObjects)=0
 	ObjectHatTexture(NofObjects)=0
@@ -12142,4 +12148,5 @@ Data "ENON","ESHI","EJIT","EWAV","EBOU","EZOO","EZSH","ECIR","EEIG","EUPD","ELER
 
 
 
+		
 		
