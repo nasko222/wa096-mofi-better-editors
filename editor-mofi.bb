@@ -8,17 +8,12 @@
 ;								msfolder.dll and .decls in Blitz3D/userlibs
 ;
 ;
-								
-
 
 Include "particles-define.bb"
 
-Global VersionText$="WA MOFI Editor (BetterEditor Mod v1.04)"
-Global TextSetting$="FONT: NORMAL"
-Global TextSettingDat
+Global VersionText$="WA MOFI Editor (BetterEditor Mod v1.05)"
 
 Global MASTERUSER=True
-
 Global LeftMouse,LeftMouseReleased,RightMouse,RightMouseReleased
 Global ReturnKey,ReturnKeyReleased,DeleteKey,DeleteKeyReleased
 
@@ -1466,7 +1461,11 @@ Function EditorControls()
 
 				If LeftMouse=True And LeftMouseReleased=True
 					
-					PlaceObject(x,y)
+					If KeyDown(29) Or KeyDown(157)
+						PlaceObject(x,y,true)
+					Else
+						PlaceObject(x,y,false)
+					EndIf
 					LeftMouseReleased=False
 					
 				EndIf
@@ -1561,7 +1560,7 @@ Function EditorControls()
 	; Change the CurrentTile
 	; *************************************
 	
-	Text 680,5,"TILES"
+	Text 590,5,"TILES"
 		
 	StartX=510
 	StartY=20
@@ -2016,23 +2015,6 @@ Function EditorControls()
 	Text 712,228,Str$(AmbientRed)
 	Text 741,228,Str$(AmbientGreen)
 	Text 770,228,Str$(AmbientBlue)
-	Text 520,5,Str$(TextSetting$)
-
-	If mx>=520 And mx<580
-		If my>=10 And my<50 And leftmouse=True And leftmousereleased=True
-			If TextSettingDat=0
-				TextSetting$ = "FONT: THICC"
-				SetFont LoadFont("courier", 16)
-				leftmousereleased=False
-				TextSettingDat=1
-			ElseIf TextSettingDat=1
-				TextSetting$ = "FONT: NORMAL"
-				SetFont LoadFont("courier", 12)
-				leftmousereleased=False
-				TextSettingDat=1
-			EndIf
-		EndIf
-	EndIf
 
 	If mx>=715 
 				
@@ -3648,16 +3630,17 @@ Function SaveObjectPreset()
 	EndIf
 End Function
 
-Function PlaceObject(x#,y#)
+Function PlaceObject(x#,y#,keepExisting)
 
-
+	If keepExisting = false
 	; first check if another object exists on the same tile
-	For i=0 To NofObjects-1
-		If ObjectTileX(i)=Floor(x) And ObjectTileY(i)=Floor(y)
-			DeleteObject(i)
-			i=i-1
-		EndIf
-	Next
+		For i=0 To NofObjects-1
+			If ObjectTileX(i)=Floor(x) And ObjectTileY(i)=Floor(y)
+				DeleteObject(i)
+				i=i-1
+			EndIf
+		Next
+	EndIf
 	
 	ObjectHatEntity(NofObjects)=0
 	ObjectHatTexture(NofObjects)=0
@@ -4591,12 +4574,6 @@ Function DisplayObjectAdjuster(i)
 				tex$="Dark"
 			Case 5
 				tex$="Shadow"
-			Case 6
-				tex$="Fire"
-			Case 7
-				tex$="Green"
-			Case 8
-				tex$="White"
 			End Select
 				
 			
@@ -4708,23 +4685,9 @@ Function DisplayObjectAdjuster(i)
 			
 			Select CurrentObjectData(1)
 			Case 1
-				tex$="Crimson/Floing"
+				tex$="Brr"
 			Case 0
 				tex$="Pow"
-			Case -1
-				tex$="Pop"
-			Case -2
-				tex$="Grow"
-			Case -3
-				tex$="Brr"
-			Case -4
-				tex$="Flash"
-			Case -5
-				tex$="Blink"
-			Case -6
-				tex$="White/Null"
-			Case -7
-				tex$="Bounce/Rainbow"
 			End Select
 		EndIf
 
@@ -6059,8 +6022,8 @@ Function AdjustObjectAdjuster(i)
 		
 		If CurrentObjectModelName$="!NPC"
 
-			If CurrentObjectData(0)>8 CurrentObjectData(0)=1
-			If CurrentObjectData(0)<1 CurrentObjectData(0)=8
+			If CurrentObjectData(0)>5 CurrentObjectData(0)=1
+			If CurrentObjectData(0)<1 CurrentObjectData(0)=5
 		EndIf
 
 		
@@ -7085,32 +7048,6 @@ Function BuildCurrentObjectModel()
 	Else If CurrentObjectModelName$="!Stinker" Or CurrentObjectModelName$="!NPC"
 		CurrentObjectModel=CopyEntity(StinkerMesh)
 		
-		If CurrentObjectData(0)=5
-			CurrentObjectTexture=MyLoadTexture("data\LevelTextures\waterfall.jpg",1)
-		Else If CurrentObjectData(0)=6
-			CurrentObjectTexture=MyLoadTexture("data\LevelTextures\waterfalllava.jpg",1)
-
-		Else
-			CurrentObjectTexture=MyLoadTexture("data/models/stinker/body00"+Str$(CurrentObjectData(0))+Chr$(65+CurrentObjectData(1))+".jpg",1)
-		EndIf
-		EntityTexture GetChild(CurrentObjectModel,3),CurrentObjectTexture
-		
-		If CurrentObjectData(2)>0	; hat
-			If CurrentObjectData(2)>9 ; two digit
-				CurrentHatModel=MyLoadMesh("data/models/stinker/accessory0"+Str$(CurrentObjectData(2))+".3ds",0)
-				CurrentHatTexture=MyLoadTexture("data/models/stinker/accessory0"+Str$(CurrentObjectData(2))+Chr$(64+CurrentObjectData(3))+".jpg",4)
-			Else
-				CurrentHatModel=MyLoadMesh("data/models/stinker/accessory00"+Str$(CurrentObjectData(2)+".3ds"),0)
-				CurrentHatTexture=MyLoadTexture("data/models/stinker/accessory00"+Str$(CurrentObjectData(2))+Chr$(64+CurrentObjectData(3))+".jpg",4)
-			EndIf
-		EndIf
-		
-		If CurrentObjectData(4)>100	; acc
-			
-				CurrentAccModel=MyLoadMesh("data/models/stinker/accessory"+Str$(CurrentObjectData(4))+".3ds",0)
-				CurrentAccTexture=MyLoadTexture("data/models/stinker/accessory"+Str$(CurrentObjectData(4))+Chr$(65+CurrentObjectData(5))+".jpg",4)
-			
-		EndIf
 
 	Else If CurrentObjectModelName$="!ColourGate"
 		CurrentObjectModel=CreateColourGateMesh(CurrentObjectData(2),CurrentObjectData(0))
@@ -8381,102 +8318,6 @@ Function LoadLevel(levelnumber)
 			ObjectEntity(Dest)=CreatePickupItemMesh(ObjectData(Dest,2))
 		Else If ObjectModelName$(Dest)="!Stinker" Or ObjectModelName$(Dest)="!NPC"
 			ObjectEntity(Dest)=CopyEntity(StinkerMesh)
-			
-			
-		
-			If ObjectData(Dest,0)=5
-				ObjectTexture(Dest)=MyLoadTexture("data\LevelTextures\waterfall.jpg",1)
-			Else If ObjectData(Dest,0)=6
-				ObjectTexture(Dest)=MyLoadTexture("data\LevelTextures\waterfalllava.jpg",1)
-	
-			Else
-				ObjectTexture(Dest)=MyLoadTexture("data/models/stinker/body00"+Str$(ObjectData(Dest,0))+Chr$(65+ObjectData(Dest,1))+".jpg",1)
-			EndIf
-			EntityTexture GetChild(ObjectEntity(Dest),3),ObjectTexture(Dest)
-			
-			
-			If ObjectData(Dest,2)>0	; hat
-				If ObjectData(Dest,2)>9 ; two digit
-					ObjectHatEntity(Dest)=MyLoadMesh("data/models/stinker/accessory0"+Str$(ObjectData(Dest,2))+".3ds",0)
-					ObjectHatTexture(Dest)=MyLoadTexture("data/models/stinker/accessory0"+Str$(ObjectData(Dest,2))+Chr$(64+ObjectData(Dest,3))+".jpg",4)
-				Else
-					ObjectHatEntity(Dest)=MyLoadMesh("data/models/stinker/accessory00"+Str$(ObjectData(Dest,2)+".3ds"),0)
-					ObjectHatTexture(Dest)=MyLoadTexture("data/models/stinker/accessory00"+Str$(ObjectData(Dest,2))+Chr$(64+ObjectData(Dest,3))+".jpg",4)
-				EndIf
-				EntityTexture ObjectHatEntity(Dest),ObjectHatTexture(Dest)
-				ScaleEntity ObjectHatEntity(Dest),ObjectXScale(Dest)*ObjectScaleAdjust(Dest),ObjectZScale(Dest)*ObjectScaleAdjust(Dest),ObjectYScale(Dest)*ObjectScaleAdjust(Dest)
-		
-				RotateEntity ObjectHatEntity(Dest),0,0,0
-				TurnEntity ObjectHatEntity(Dest),ObjectPitchAdjust(dest),0,ObjectRollAdjust(dest)
-				TurnEntity ObjectHatEntity(Dest),0,ObjectYawAdjust(dest)-90,0
-
-					PositionEntity ObjectHatEntity(Dest),ObjectX(Dest)+ObjectXAdjust(Dest),ObjectZ(Dest)+ObjectZAdjust(Dest)+.1+.84*ObjectZScale(Dest)/.035,-ObjectY(Dest)-ObjectYAdjust(Dest)
-
-			EndIf
-			
-			If ObjectData(Dest,4)>100	; acc
-				
-					ObjectAccEntity(Dest)=MyLoadMesh("data/models/stinker/accessory"+Str$(ObjectData(Dest,4))+".3ds",0)
-					ObjectAccTexture(Dest)=MyLoadTexture("data/models/stinker/accessory"+Str$(ObjectData(Dest,4))+Chr$(65+ObjectData(Dest,5))+".jpg",4)
-				EntityTexture ObjectAccEntity(Dest),ObjectAccTexture(Dest)
-				
-				ScaleEntity ObjectAccEntity(Dest),ObjectXScale(Dest)*ObjectScaleAdjust(Dest),ObjectZScale(Dest)*ObjectScaleAdjust(Dest),ObjectYScale(Dest)*ObjectScaleAdjust(Dest)
-		
-				RotateEntity ObjectAccEntity(Dest),0,0,0
-				TurnEntity ObjectAccEntity(Dest),ObjectPitchAdjust(dest),0,ObjectRollAdjust(dest)
-				TurnEntity ObjectAccEntity(Dest),0,ObjectYawAdjust(dest)-90,0
-
-				
-				
-				PositionEntity ObjectAccEntity(Dest),ObjectX(Dest)+ObjectXAdjust(Dest),ObjectZ(Dest)+ObjectZAdjust(Dest)+.1+.84*ObjectZScale(Dest)/.035,-ObjectY(Dest)-ObjectYAdjust(Dest)
-
-
-
-			EndIf
-			
-			
-			
-			
-	If CurrentHatModel>0
-	
-		
-		EntityTexture CurrentHatModel,CurrentHatTexture
-		ScaleEntity CurrentHatModel,CurrentObjectYScale*CurrentObjectScaleAdjust,CurrentObjectZScale*CurrentObjectScaleAdjust,CurrentObjectXScale*CurrentObjectScaleAdjust
-		;RotateEntity CurrentObjectModel,CurrentObjectPitchAdjust,CurrentObjectYawAdjust,CurrentObjectRollAdjust
-		RotateEntity CurrentHatModel,0,0,0
-		TurnEntity CurrentHatModel,CurrentObjectPitchAdjust,0,CurrentObjectRollAdjust
-		TurnEntity CurrentHatModel,0,CurrentObjectYawAdjust-90,0
-		
-		bone=FindChild(CurrentObjectModel,"hat_bone")
-	
-		PositionEntity CurrentHatModel,0+CurrentObjectXAdjust,300+CurrentObjectZAdjust+CurrentObjectZ+.1+.84*CurrentObjectZScale/.035,0-CurrentObjectYAdjust
-
-
-	EndIf
-	
-	If CurrentAccModel>0
-	
-		
-		EntityTexture CurrentAccModel,CurrentAccTexture
-		ScaleEntity CurrentAccModel,CurrentObjectYScale*CurrentObjectScaleAdjust,CurrentObjectZScale*CurrentObjectScaleAdjust,CurrentObjectXScale*CurrentObjectScaleAdjust
-		;RotateEntity CurrentObjectModel,CurrentObjectPitchAdjust,CurrentObjectYawAdjust,CurrentObjectRollAdjust
-		RotateEntity CurrentAccModel,0,0,0
-		TurnEntity CurrentAccModel,CurrentObjectPitchAdjust,0,CurrentObjectRollAdjust
-		TurnEntity CurrentAccModel,0,CurrentObjectYawAdjust-90,0
-		
-		bone=FindChild(CurrentObjectModel,"hat_bone")
-	
-		PositionEntity CurrentAccModel,0+CurrentObjectXAdjust,300+CurrentObjectZAdjust+CurrentObjectZ+.1+.84*CurrentObjectZScale/.035,0-CurrentObjectYAdjust
-
-
-	EndIf
-
-
-	
-		
-
-
-
 		Else If ObjectModelName$(Dest)="!StinkerWee"
 			ObjectEntity(Dest)=CopyEntity(StinkerWeeMesh)
 		Else If ObjectModelName$(Dest)="!Cage"
