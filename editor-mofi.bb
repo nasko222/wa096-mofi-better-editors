@@ -11,7 +11,7 @@
 
 Include "particles-define.bb"
 
-Global VersionText$="WA MOFI Editor (BetterEditor Mod v1.05)"
+Global VersionText$="WA MOFI Editor (BetterEditor Mod v1.06)"
 
 Global MASTERUSER=True
 Global LeftMouse,LeftMouseReleased,RightMouse,RightMouseReleased
@@ -6136,8 +6136,8 @@ Function AdjustObjectAdjuster(i)
 		EndIf
 		
 		If CurrentObjectModelName$="!Sign"
-			If CurrentObjectData(1)>5 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=5
+			If CurrentObjectData(1)>3 CurrentObjectData(1)=0
+			If CurrentObjectData(1)<0 CurrentObjectData(1)=3
 			
 
 		EndIf

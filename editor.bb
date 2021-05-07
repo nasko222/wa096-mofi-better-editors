@@ -11,7 +11,7 @@
 
 Include "particles-define.bb"
 
-Global VersionText$="WA 0.96 Editor (BetterEditor Mod v1.05)"
+Global VersionText$="WA 0.96 Editor (BetterEditor Mod v1.06)"
 
 Global MASTERUSER=False
 Global LeftMouse,LeftMouseReleased,RightMouse,RightMouseReleased
@@ -5898,8 +5898,8 @@ Function AdjustObjectAdjuster(i)
 		EndIf
 		
 		If CurrentObjectModelName$="!Sign"
-			If CurrentObjectData(1)>5 CurrentObjectData(1)=0
-			If CurrentObjectData(1)<0 CurrentObjectData(1)=5
+			If CurrentObjectData(1)>3 CurrentObjectData(1)=0
+			If CurrentObjectData(1)<0 CurrentObjectData(1)=3
 			
 
 		EndIf
@@ -8063,7 +8063,6 @@ Function LoadLevel(levelnumber)
 
 		Else If ObjectModelName$(Dest)="!FireFlower"
 			ObjectEntity(Dest)=CopyEntity(FireFlowerMesh)
-			If ObjectData(Dest,1)=1 EntityTexture ObjectEntity(Dest),FireFlowerTexture2
 
 		Else If ObjectModelName$(Dest)="!Busterfly"
 			ObjectEntity(Dest)=CopyEntity(busterflyMesh)
