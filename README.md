@@ -1,7 +1,5 @@
 # wa096-mofi-better-editors
  WA 0.96 & WA MOFI Better Editors.
- Project WA 0.96 LIMITATION REMOVER (ASM HACK) - ABANDONED
- https://github.com/nasko222/wa-asm-mods/tree/master/wa096-limitation-remover
  
  **WARNING THIS REPO IS NOW ABANDONED, CHECK THE NEW 0.96 BETTER EDITOR MERGE - https://github.com/nasko222/wonderland-adventures-better-editor
  
