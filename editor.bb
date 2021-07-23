@@ -4447,7 +4447,7 @@ Function DisplayObjectAdjuster(i)
 
 	Case "Data1"
 		tex$=Str$(CurrentObjectData(1))
-		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap"
+		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter" Or CurrentObjectModelName$="!ColourGate" Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!Retrolasergate"
 			tex2$="SubColour"
 		EndIf
 		
@@ -4596,6 +4596,17 @@ Function DisplayObjectAdjuster(i)
 		
 		If CurrentObjectType=51 ; spellball generator
 			tex2$="Goal X"
+		EndIf
+		
+		If  (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectModelName$<>"!Retrolasergate")
+
+			tex2$="Turning"
+			If CurrentObjectData(1)=0
+				tex$="Left"
+			Else If CurrentObjectData(1)=1
+				tex$="Right"
+			
+			EndIf
 		EndIf
 		
 
@@ -5830,7 +5841,7 @@ Function AdjustObjectAdjuster(i)
 		If Fast Adj=10
 		If LeftMouse=True Then CurrentObjectData(1)=CurrentObjectData(1)+Adj
 		If RightMouse=True Then CurrentObjectData(1)=CurrentObjectData(1)-Adj
-		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter"  Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap"
+		If CurrentObjectModelName$="!Spring" Or CurrentObjectModelName$="!SteppingStone" Or CurrentObjectModelName$="!Transporter"  Or (CurrentObjectModelName$="!Button" And ((CurrentObjectSubType Mod 32)=16 Or (CurrentObjectSubType Mod 32)=17)) Or CurrentObjectModelName$="!Door" Or CurrentObjectModelName$="!Key" Or CurrentObjectModelName$="!Teleport" Or CurrentObjectModelName$="!Cage" Or CurrentObjectTextureName$="!FireTrap" Or CurrentObjectModelName$="!Retrolasergate"
 
 
 			; subcolours [2^16-1; 2^16-1)
@@ -5889,7 +5900,7 @@ Function AdjustObjectAdjuster(i)
 			
 
 		EndIf
-		If CurrentObjectModelName$="!Thwart"
+		If CurrentObjectModelName$="!Thwart" Or (Left$(CurrentObjectModelName$,6)="!Retro" And CurrentObjectModelName$<>"!Retrolasergate")
 
 			If CurrentObjectData(1)>1 CurrentObjectData(1)=0
 			If CurrentObjectData(1)<0 CurrentObjectData(1)=1
